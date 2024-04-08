@@ -9,6 +9,8 @@
 <p>{{ post.content }}</p>
 <a href="{{ path('show', {slug:post.slug})}}" class="btn btn-primary">Voir plus</a>
 {% endfor %}
-
+ <div class='d-flex justify-content-center'>
+ {{ knp_pagination_render(posts) }}
+ </div>
 </div>
 {% endblock %}

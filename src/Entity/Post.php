@@ -10,6 +10,8 @@ use Cocur\Slugify\Slugify;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 // Mettre des contraintes sur vos props 
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\HasLifecycleCallbacks]
 #[UniqueEntity('slug', message:'Ce slug existe déjà.')]
@@ -41,6 +43,9 @@ class Post
 
     #[ORM\Column]
     private ?\DateTimeImmutable $updatedAt = null;
+
+    #[ORM\ManyToMany(targetEntity: Categories::class, inversedBy:'post')]
+    private Collection $category;
 
     public function __construct(){
         $this->createdAt = new \DateTimeImmutable();
@@ -133,6 +138,31 @@ class Post
     public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    
+    /**
+     * @return Collection<int, Categories>
+     */
+    public function getCategory(): Collection
+    {
+        return $this->category;
+    }
+
+    public function addCategories(Categories $categories): static
+    {
+        if (!$this->category->contains($categories)) {
+            $this->category->add($categories);
+        }
+
+        return $this;
+    }
+
+    public function removeCategories(Categories $categories): static
+    {
+        $this->category->removeElement($categories);
 
         return $this;
     }
