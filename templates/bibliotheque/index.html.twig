@@ -1,0 +1,88 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Symfony Book{% endblock %}
+
+{% block body %}
+    <h1>Bibliotheque</h1>
+    <nav>
+        <ul>
+            {# <li><a href="{{ path('app_livres_index') }}">Livres</a></li> #}
+            {# <li><a href="{{ path('app_auteurs_index') }}">Auteurs</a></li> #}
+            {# <li><a href="{{ path('app_emprunts_index') }}">Emprunts</a></li> #}
+           
+
+            {% include "components/_search.html.twig" with { form:form ?? null } only  %}
+        </ul>
+    </nav>
+    {% if livres is defined %}
+    {# {% for livre in livres %}
+        <div class="container text-center">
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+                <div class="col">
+                    <div class="card mb-3" style="max-width: 540px;">
+                        <div class="row g-0">
+                            <div class="col-md-4">
+                                <img src="{{ vich_uploader_asset(livre, 'imageFile') }}" class="img-fluid rounded-start" alt="{{ livre.nom }}">
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ livre.nom }}</h5> 
+                                    <h6>Auteur : </h6>
+                                    <p>Date de publication : {{ livre.anneePublication }}</p>
+                                    <h6> {{ livre.disponibilite ? 'Disponible' : 'Indisponible' }}</h6>
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop{{ livre.id }}">voir plus</button>  
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                 </div>
+            </div>  
+        </div>    
+    {% endfor %} #}
+    {% else %}
+    {% endif %}
+
+    {# tous les livres #}
+    {% for livre in livres %}
+    
+    <div class="container text-center">
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        <div class="col">
+            <div class="card mb-3" style="max-width: 540px;">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="{{ vich_uploader_asset(livre, 'imageFile') }}" class="img-fluid rounded-start" alt="{{ livre.nom }}">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ livre.nom }}</h5> 
+                            <h6>Auteur : </h6>
+                            <p>Date de publication : {{ livre.anneePublication }}</p>
+                                {% if livre.emprunts|late.date_restitution_effective %}
+                                    <p>Emprunté le: {{ livre.emprunts|last.date_demande|date('Y-m-d') }}</p>
+                                    <p>Restitution prévue: {{ livre.emprunts|last.date_restitution_previsionnelle|date('Y-m-d') }}</p>
+                                    <button onclick="location.href='/livres/restituer/{{ livre.id }}'">Restituer</button>
+                                {% else %}
+                                    <p>Disponible</p>
+                                {% endif %}
+                            {% if etat_livre is defined %}
+                                <p>État : {{ etat_livre.libelle }}</p>
+                            {% else %}
+                                <p>État du livre non défini</p>
+                            {% endif %}
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop{{ livre.id }}">voir plus</button>  
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>  
+    </div>     
+   {% endfor %}
+    
+    {# {% if livre.disponibilite == true %} #}
+   
+</div>
+{% endblock %}

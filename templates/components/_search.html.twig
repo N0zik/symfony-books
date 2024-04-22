@@ -1,0 +1,6 @@
+{% if form  %}
+    {{ form_start(form) }}
+    {{ form_row(form.query) }}
+    {{ form_row(form.submit, { "attr" : { "class": "form-control btn btn-primary"}} ) }}
+    {{ form_end(form) }}
+{% endif %}

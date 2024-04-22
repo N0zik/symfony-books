@@ -21,6 +21,22 @@ class LivresRepository extends ServiceEntityRepository
         parent::__construct($registry, Livres::class);
     }
 
+    public function search($data)
+    {
+        $queryBuilder = $this->createQueryBuilder('l');
+        if (!empty($data->query)) {
+            $queryBuilder
+                ->andWhere('l.nom LIKE :query')
+                ->setParameter('query', '%' . $data->query . '%');
+        }
+
+        $queryBuilder->setMaxResults(10);
+
+        return $queryBuilder
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return Livres[] Returns an array of Livres objects
 //     */
