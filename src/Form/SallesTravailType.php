@@ -4,11 +4,11 @@ namespace App\Form;
 
 use App\Entity\Equipements;
 use App\Entity\SallesTravail;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 class SallesTravailType extends AbstractType
 {
@@ -26,8 +26,9 @@ class SallesTravailType extends AbstractType
             , null, [
                 'label' => 'Disponibilité de la salle'
             ])
-            ->add('equipements', CheckboxType::class, [
+            ->add('equipements', EntityType::class, [
                 'label' => 'Equipements de la salle',
+                'mapped' => false,
                 'class' => Equipements::class,
                 'choice_label' => 'id',
                 'multiple' => true,
