@@ -59,7 +59,25 @@ class BibliothequeController extends AbstractController
         return $this->render('bibliotheque/show.html.twig', [
             'livreEtat' => $livreEtat
         ]);
+    }
+    public function showAuteur($auteurId, AuteursRepository $auteurRepository): Response
+    {
+        $auteur = $auteurRepository->find($auteurId);
 
+        if(!$auteur){
+            throw $this->createNotFoundException('L\'auteur n\'existe pas');
+        }
 
+        return $this->render('bibliotheque/showAuteur.html.twig', [
+            'auteur' => $auteur
+        ]);
+    }
+    public function liste (LivresRepository $livreRepository, AuteursRepository $AuteursRepository, EtatsLivresRepository $etatsLivres): Response
+    {
+        return $this->render('bibliotheque/liste.html.twig', [
+            'livres' => $livreRepository->findAll(),
+            'auteurs' => $AuteursRepository->findAll(),
+            'etatsLivres' => $etatsLivres->findAll()
+        ]);
     }
 }

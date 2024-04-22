@@ -59,29 +59,19 @@
                             <h5 class="card-title">{{ livre.nom }}</h5> 
                             <h6>Auteur : </h6>
                             <p>Date de publication : {{ livre.anneePublication }}</p>
-                            <h6> {{ livre.disponibilite ? 'Disponible' : 'Indisponible' }}</h6>
+                                {% if livre.emprunts|late.date_restitution_effective %}
+                                    <p>Emprunté le: {{ livre.emprunts|last.date_demande|date('Y-m-d') }}</p>
+                                    <p>Restitution prévue: {{ livre.emprunts|last.date_restitution_previsionnelle|date('Y-m-d') }}</p>
+                                    <button onclick="location.href='/livres/restituer/{{ livre.id }}'">Restituer</button>
+                                {% else %}
+                                    <p>Disponible</p>
+                                {% endif %}
                             {% if etat_livre is defined %}
                                 <p>État : {{ etat_livre.libelle }}</p>
                             {% else %}
                                 <p>État du livre non défini</p>
                             {% endif %}
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop{{ livre.id }}">voir plus</button>  
-                                {# <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="staticBackdropLabel">{{ livre.nom }}</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div> 
-                                        <div class="modal-body">
-                                            <img src="{{ vich_uploader_asset(livre, 'imageFile') }}" class="img-fluid rounded-start" alt="{{ livre.nom }}">
-                                            <h6>Auteur : </h6>
-                                            <p>Date de publication : {{ livre.anneePublication }}</p>
-                                            <p>{{ livre.resume }}</p>
-                                            <h6> {{ livre.disponibilite ? 'Disponible' : 'Indisponible' }}</h6>
-                                            <button class="btn btn-primary">Emprunter</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> #}
 
                         </div>
                     </div>

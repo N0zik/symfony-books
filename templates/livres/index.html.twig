@@ -26,7 +26,6 @@
                 <td>{{ livre.resume }}</td>
                 <td> <img src="{{ vich_uploader_asset(livre, 'imageFile') }}" alt="{{ livre.nom }}"/></td>
                 <td>{{ livre.disponibilite ? 'Oui' : 'Non' }}</td>
-                
                 <td>
                     <a class="btn btn-primary" href="{{ path('app_livres_show', {'id': livre.id}) }}">Visuel</a>
                     <a class="btn btn-primary" href="{{ path('app_livres_edit', {'id': livre.id}) }}">Editer</a>
