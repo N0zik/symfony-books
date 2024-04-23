@@ -40,10 +40,10 @@ class LivresType extends AbstractType
                 'class' => Auteurs::class,
                 'choice_label' => 'nom',
                 'multiple' => true,
+                'expanded' => true,
                             ])
-                            
-        ;
-    }
+                        ;
+                    }
 
     public function configureOptions(OptionsResolver $resolver): void
     {

@@ -19,34 +19,32 @@ class BibliothequeController extends AbstractController
     {
        
         $etatsLivresData = $etatsLivres->findAll();
+        $auteurs = $AuteursRepository->findAll();
         $form = $this->createForm(SearchType::class, $data);
         $form ->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             $livres = $livreRepository->search($data);
-            dd($livres);
           
             return $this->render('bibliotheque/index.html.twig', [
                 'controller_name' => 'BibliothequeController',
                 'livres' => $livres,
-                'auteurs' => $AuteursRepository->findAll(),
+                'auteurs' => $auteurs,
                 'form' => $form->createView(),
                 'etatsLivres' => $etatsLivresData
             ]);
-        }
+        } 
+       
 
         return $this->render('bibliotheque/index.html.twig', [
             'controller_name' => 'BibliothequeController',
             'livres' => $livreRepository->findAll(),
-            'auteurs' => $AuteursRepository->findAll(),
+            'auteurs' => $auteurs,
             'form' => $form->createView(),
             'etatsLivres' => $etatsLivresData
-
         ]);
-
-
-
     }
+
     public function show($livreId, LivresRepository $livreRepository, EtatsLivresRepository $EtatRepo): Response
     {
         $livreEtat = $livreRepository->find($livreId);
@@ -60,10 +58,10 @@ class BibliothequeController extends AbstractController
             'livreEtat' => $livreEtat
         ]);
     }
+
     public function showAuteur($auteurId, AuteursRepository $auteurRepository): Response
     {
         $auteur = $auteurRepository->find($auteurId);
-
         if(!$auteur){
             throw $this->createNotFoundException('L\'auteur n\'existe pas');
         }
