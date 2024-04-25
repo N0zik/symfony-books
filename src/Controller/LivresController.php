@@ -57,6 +57,7 @@ class LivresController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($livre);
             $entityManager->flush();
 
             return $this->redirectToRoute('app_livres_index', [], Response::HTTP_SEE_OTHER);
