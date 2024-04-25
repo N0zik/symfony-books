@@ -7,30 +7,84 @@
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
 </style>
-<div>
-<h1>Salles de travail</h1>
-<h3>La reservation des salles s'effectue du lundi au vendredi de 8h à 19h </h3>
-<h4>Chaque reservation sera de 1h minimun et de 4h maximun</h4>
+<div class="container text-center mt-5">
+  <h1 class="mb-4">Salles de travail</h1>
+  <h3 class="mb-2">La réservation des salles s'effectue du lundi au vendredi de 8h à 19h</h3>
+  <h4 class="mb-5">Chaque réservation sera d'au moins 1 heure et d'au plus 4 heures</h4>
 </div>
-<div class="card" style="width: 18rem;">
-  <img src="/images/sallesdetravail/salle-de-travail-1-archive.jpg" class="card-img-top" alt="...">
-  <div class="card-body">
-    <h5 class="card-title">Salles Archives</h5>
-    <p class="card-text">Ici vous trouverez les archives nationales d'histoire locale et international </p>
-  </div>
 
-  <ul class="list-group list-group-flush">
-    <li class="list-group-item d-flex justify-content-between align-items-center">Capacité d'accueil : 0/15 </li>
-    <li class="list-group-item d-flex justify-content-between align-items-center">Wi-Fi <img src="/images/icon/check-rouge.png" style="width: 20px" alt=""></li>
-    <li class="list-group-item d-flex justify-content-between align-items-center">Projecteur <img src="/images/icon/check-vert.png" style="width: 20px" alt=""></li>
-    <li class="list-group-item d-flex justify-content-between align-items-center">Tableau <img src="/images/icon/check-vert.png" style="width: 20px" alt=""></li>
-    <li class="list-group-item d-flex justify-content-between align-items-center">Prise électriques <img src="/images/icon/check-rouge.png" style="width: 20px" alt=""></li>
-    <li class="list-group-item d-flex justify-content-between align-items-center ">Télévision <img src="/images/icon/check-rouge.png" style="width: 20px" alt=""></li>
-    <li class="list-group-item d-flex justify-content-between align-items-center">Salle climatisé <img src="/images/icon/check-vert.png" style="width: 20px" alt=""></li>
-  </ul>
-  <div class="card-body">
-    <a href="#" class="card-link">Reservez un créneau</a>
-
+<div class="container mt-5">
+  <div class="row">
+    {% for salleTravail in salles_travails %}
+      <div class="col-md-4 justify-content-center">
+        <div class="card mb-4">
+          <img src="{{ vich_uploader_asset(salleTravail, 'imageFile') }}" class="card-img-top" alt="{{ salleTravail.nom }}" style="height: 350px">
+          <div class="card-body">
+            <h5 class="card-title">{{ salleTravail.nom }}</h5>
+            <p class="card-text" style="height: 130px">{{ salleTravail.description }}</p>
+          </div>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                Capacité d'accueil : {{ salleTravail.capacite }}
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                Wi-Fi
+                {% if salleTravail.wifi %}
+                  <img src="/images/icon/check-vert.png" style="width: 20px" alt="Vert">
+                {% else %}
+                  <img src="/images/icon/check-rouge.png" style="width: 20px" alt="Rouge">
+                {% endif %}
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                Projecteur
+                {% if salleTravail.projecteur %}
+                  <img src="/images/icon/check-vert.png" style="width: 20px" alt="Vert">
+                {% else %}
+                  <img src="/images/icon/check-rouge.png" style="width: 20px" alt="Rouge">
+                {% endif %}
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                Tableau
+                {% if salleTravail.tableau %}
+                <img src="/images/icon/check-vert.png" style="width: 20px" alt="Vert">
+                {% else %}
+                <img src="/images/icon/check-rouge.png" style="width: 20px" alt="Rouge">
+                {% endif %}
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                Prise électriques
+                {% if salleTravail.priseElectrique %}
+                  <img src="/images/icon/check-vert.png" style="width: 20px" alt="Vert">
+                {% else %}
+                  <img src="/images/icon/check-rouge.png" style="width: 20px" alt="Rouge">
+                {% endif %}
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center ">
+                Télévision
+                {% if salleTravail.television %}
+                  <img src="/images/icon/check-vert.png" style="width: 20px" alt="Vert">
+                {% else %}
+                  <img src="/images/icon/check-rouge.png" style="width: 20px" alt="Rouge">
+                {% endif %}
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                Salle climatisé
+                {% if salleTravail.climatisation %}
+                  <img src="/images/icon/check-vert.png" style="width: 20px" alt="Vert">
+                {% else %}
+                  <img src="/images/icon/check-rouge.png" style="width: 20px" alt="Rouge">
+                {% endif %}
+              </li>
+            </ul>
+          <div class="card-body d-flex justify-content-center">
+              <a href="{{ path('app_calendar_new') }}" class="btn btn-outline-success btn-lg btn-block  ">Réservez un créneau</a>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
   </div>
 </div>
 {% endblock %}
+
+
+
