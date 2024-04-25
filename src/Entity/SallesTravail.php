@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: SallesTravailRepository::class)]
 #[Vich\Uploadable]
@@ -76,7 +77,15 @@ class SallesTravail
         return $this->id;
     }
 
+
+
+
     /**
+     * * @Vich\UploadableField(mapping: 'salles_images', fileNameProperty: 'imageName', size: 'imageSize')
+     * @Assert\File(
+     *     maxSize="20M", // Définissez la taille maximale autorisée pour le fichier
+     *     mimeTypes={"image/jpeg", "image/png", "image/gif"} // Types MIME autorisés
+     * )
      * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile|null $imageFile
      */
     public function setImageFile(?File $imageFile = null): void
