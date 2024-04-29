@@ -1,0 +1,11 @@
+{% if form %}
+{{ form_start(form) }}
+    {{ form_row(form.query) }}
+    {{ form_row(form.submit) }}
+{{ form_end(form) }}
+{% endif %}
+
+{# form_row on affiche tout #}
+{# form_label on affiche que le label #}
+{# form_errors on affiche que les erreurs #}
+{# form_widget on affiche que le widget #}

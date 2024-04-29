@@ -3,8 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Post;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Component\Pager\PaginatorInterface;
+use Knp\Component\Pager\Pagination\PaginationInterface;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<Post>
@@ -16,20 +18,34 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class PostRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private $paginator;
+    public function __construct(ManagerRegistry $registry, PaginatorInterface $paginator)
     {
         parent::__construct($registry, Post::class);
+        $this->paginator = $paginator;
     }
 
 
-    public function findPublished():array
+    public function findPublished(int $page, $categorie=null):PaginationInterface
     {
-        return $this->createQueryBuilder('p')
+        $data = $this->createQueryBuilder('p')
         ->andWhere('p.state = :state')
         ->setParameter('state', 'PUBLISHED')
-        ->orderBy('p.createdAt', 'DESC')
+        ->orderBy('p.createdAt', 'DESC');
+        if($categorie !=null){
+            $data->join('p.category', 'categ')
+            ->andWhere('categ = :categ')
+            ->setParameter('categ', $categorie);
+        };
+        $query = $data
         ->getQuery()
         ->getResult();
+        $post = $this->paginator->paginate(
+            $query,
+            $page,
+            10
+        );
+        return $post;
     }
 
     //    /**

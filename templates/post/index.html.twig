@@ -3,8 +3,10 @@
 {% block title %}Hello PostController!{% endblock %}
 
 {% block body %}
+{% include "components/_search.html.twig" with { form: formView ?? null } only %}
 <div class="container">
 {% for post in posts %}
+{% include "components/_badge.html.twig" with { categ: post.category } only %}
 <h2>{{ post.title }}</h2>
 <p>{{ post.content }}</p>
 <a href="{{ path('show', {slug:post.slug})}}" class="btn btn-primary">Voir plus</a>
