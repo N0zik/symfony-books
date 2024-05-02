@@ -66,7 +66,7 @@ class Livres
         $this->auteurs = new ArrayCollection();
         $this->notes = new ArrayCollection();
         $this->emprunts = new ArrayCollection();
-    }
+    } 
 
     public function getId(): ?int
     {
@@ -195,7 +195,6 @@ class Livres
     public function removeCommentaire(Commentaires $commentaire): static
     {
         if ($this->commentaires->removeElement($commentaire)) {
-            // set the owning side to null (unless already changed)
             if ($commentaire->getLivres() === $this) {
                 $commentaire->setLivres(null);
             }
@@ -294,7 +293,6 @@ class Livres
     public function removeEmprunt(Emprunts $emprunt): static
     {
         if ($this->emprunts->removeElement($emprunt)) {
-            // set the owning side to null (unless already changed)
             if ($emprunt->getLivres() === $this) {
                 $emprunt->setLivres(null);
             }
@@ -302,4 +300,6 @@ class Livres
 
         return $this;
     }
+
+
 }

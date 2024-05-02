@@ -134,20 +134,19 @@ class Emprunts
         if (!$this->commentairesEmprunts->contains($commentairesEmprunt)) {
             $this->commentairesEmprunts->add($commentairesEmprunt);
             $commentairesEmprunt->setEmprunts($this);
+            $commentairesEmprunt->setDateAjout(new \DateTime());
+            $set = $commentairesEmprunt->setUtilisateurs($this->getUtilisateurs());
         }
-
         return $this;
     }
 
     public function removeCommentairesEmprunt(CommentairesEmprunts $commentairesEmprunt): static
     {
         if ($this->commentairesEmprunts->removeElement($commentairesEmprunt)) {
-            // set the owning side to null (unless already changed)
             if ($commentairesEmprunt->getEmprunts() === $this) {
                 $commentairesEmprunt->setEmprunts(null);
             }
         }
-
         return $this;
-    }
+    } 
 }
