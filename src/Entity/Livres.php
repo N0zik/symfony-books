@@ -60,13 +60,17 @@ class Livres
     #[ORM\OneToMany(targetEntity: Emprunts::class, mappedBy: 'livres', orphanRemoval: true)]
     private Collection $emprunts;
 
+    #[ORM\OneToMany(targetEntity: CommentairesEmprunts::class, mappedBy: 'livres', orphanRemoval: true)]
+    private Collection $commentairesEmprunts;
+
     public function __construct()
-    {
+    {   
+        $this->commentairesEmprunts = new ArrayCollection();
         $this->commentaires = new ArrayCollection();
         $this->auteurs = new ArrayCollection();
         $this->notes = new ArrayCollection();
         $this->emprunts = new ArrayCollection();
-    }
+    } 
 
     public function getId(): ?int
     {
@@ -195,7 +199,6 @@ class Livres
     public function removeCommentaire(Commentaires $commentaire): static
     {
         if ($this->commentaires->removeElement($commentaire)) {
-            // set the owning side to null (unless already changed)
             if ($commentaire->getLivres() === $this) {
                 $commentaire->setLivres(null);
             }
@@ -294,7 +297,6 @@ class Livres
     public function removeEmprunt(Emprunts $emprunt): static
     {
         if ($this->emprunts->removeElement($emprunt)) {
-            // set the owning side to null (unless already changed)
             if ($emprunt->getLivres() === $this) {
                 $emprunt->setLivres(null);
             }
@@ -302,4 +304,18 @@ class Livres
 
         return $this;
     }
+
+    public function getCommentairesEmprunts(): Collection
+    {
+        return $this->commentairesEmprunts;
+    } 
+
+    public function setCommentairesEmprunts(?CommentairesEmprunts $commentairesEmprunts): static
+    {
+        $this->commentairesEmprunts = $commentairesEmprunts;
+
+        return $this;
+    }
+
+
 }

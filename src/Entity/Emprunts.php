@@ -25,6 +25,9 @@ class Emprunts
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateRestitutionEffective = null;
 
+    #[ORM\Column(type: Types::BOOLEAN)]
+    private ?bool $restitue = true;
+
     #[ORM\Column]
     private ?bool $extensionEmprunt = null;
 
@@ -134,20 +137,30 @@ class Emprunts
         if (!$this->commentairesEmprunts->contains($commentairesEmprunt)) {
             $this->commentairesEmprunts->add($commentairesEmprunt);
             $commentairesEmprunt->setEmprunts($this);
+            $commentairesEmprunt->setDateAjout(new \DateTime());
+            $set = $commentairesEmprunt->setUtilisateurs($this->getUtilisateurs());
         }
-
         return $this;
     }
 
     public function removeCommentairesEmprunt(CommentairesEmprunts $commentairesEmprunt): static
     {
         if ($this->commentairesEmprunts->removeElement($commentairesEmprunt)) {
-            // set the owning side to null (unless already changed)
             if ($commentairesEmprunt->getEmprunts() === $this) {
                 $commentairesEmprunt->setEmprunts(null);
             }
         }
-
         return $this;
-    }
+    } 
+      
+        public function getRestitue(): bool
+        {
+            return $this->restitue;
+        }
+    
+        public function setRestitue(bool $restitue): self
+        {
+            $this->restitue = $restitue;
+            return $this;
+        }
 }
