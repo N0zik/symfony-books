@@ -27,11 +27,11 @@
                     </div>
                     <div class="modal-body">
                         <img src="{{ vich_uploader_asset(livre, 'imageFile') }}" class="img-fluid rounded-start" alt="{{ livre.nom }}">
-                       
+                        {# info sur le livre #}
                         <h5>résumer :</h5>
                         <p>{{ livre.resume }}</p>
                         <p> <h5>Année de publication :</h5> {{ livre.anneePublication }} </p>
-                    
+                        {# auteurs #}
                         <h5>Auteur(s) : 
                             {% if livre.auteurs is empty %}
                                 <p>Aucun auteur trouvé.</p>
@@ -40,8 +40,9 @@
                                     <p>{{ auteurs.nom }}</p>
                                 {% endfor %}
                             {% endif %}
-                        </h5>
+                        </h5> 
 
+                        {# Emprunt #}
                         <p>État : {{ livre.etatsLivres.libelle }}</p> 
                         {% if livre.emprunts is not empty %}
 
@@ -55,6 +56,34 @@
                                 <p>Disponible</p>
                                 <button  class="btn btn-success" onclick="location.href='/livres/emprunter/{{ livre.id }}'">Emprunter</button>
                             {% endif %}
+                        {#ajouter un commentaire#}
+                        <h5>Ajouter un commentaire :</h5>
+                        <textarea name="commentaire" id="commentaire" cols="30" rows="10"></textarea><br>
+
+                        {# <label for="note">Note :</label>
+                        <select name="note" id="note">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select><br> #}
+
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#commentaireEmprunt{{ livre.id }}">Ajouter un commentaire</button>
+
+                        {# commentaires #}
+
+                        <h5>Commentaires :</h5>
+                        {% if livre.commentaires is empty %}
+                            <p>Aucun commentaire trouvé.</p>
+                        {% else %}
+                            {% for commentaire in livre.commentaires %}
+                                <p>{{ commentaire.commentaire }}</p>
+                                <p>{{ commentaire.note }}</p>
+                            {% endfor %}
+                        {% endif %}
+
+                            
                         
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
@@ -64,7 +93,7 @@
         </div>
     </div> 
     {% endfor %}
-
+    {# fin modal #}
     {# tous les livres #}
     {% for livre in livres %}
     <div class="container">

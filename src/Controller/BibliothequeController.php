@@ -6,6 +6,7 @@ use App\DTO\SearchData;
 use App\Form\SearchType;
 use App\Repository\LivresRepository;
 use App\Repository\AuteursRepository;
+use App\Form\CommentairesEmpruntsType;
 use App\Repository\EtatsLivresRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -77,5 +78,49 @@ class BibliothequeController extends AbstractController
             'auteurs' => $AuteursRepository->findAll(),
             'etatsLivres' => $etatsLivres->findAll()
         ]);
+    }
+
+    public function commentaireEmprunt(): Response
+    {
+        $commentaireEmprunt = new CommentairesEmprunts();
+        $form = $this->createForm(CommentairesEmpruntsType::class, $commentaireEmprunt);
+        $handleRequest = $request->request->get('commentaire');
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $commentaireEmprunt = $form->getData();
+            $commentaireEmprunt->setCreateAt(new \DateTime());
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($commentaireEmprunt);
+            $entityManager->flush();
+            
+            return $this->redirectToRoute('app_bibliotheque');
+        }
+
+        return $this->render('bibliotheque/commentaireEmprunt.html.twig', [
+            'controller_name' => 'BibliothequeController',
+            'form' => $form->createView(),
+            
+        ]);
+       
+    }
+
+    public function emprunter(Request $request, LivresRepository $livreRepository): Response
+    {
+        $emprunt = new Emprunts();
+        $emprunt->setLivres($livre);
+        $emprunt->setUser($this->getUser());
+        $emprunt->setDateEmprunt(new \DateTime());
+        $emprunt->setDateRetour(new \DateTime('+6 days'));
+        $emprunt->setExtension(false);
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($emprunt);
+        $entityManager->flush(); 
+
+        $livre->setDisponible(new \DateTime('+6 days'));
+        $entityManager->persist($livre);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_bibliotheque');
     }
 }
