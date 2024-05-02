@@ -19,7 +19,7 @@
         {% for livre in livres %}
        
         <div class="modal fade" id="staticBackdrop{{ livre.id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="staticBackdropLabel">{{ livre.nom }}</h5>
@@ -41,21 +41,20 @@
                                 {% endfor %}
                             {% endif %}
                         </h5> 
+                        <p>État : {{ livre.etatsLivres.libelle }}</p> 
 
                         {# Emprunt #}
-                        <p>État : {{ livre.etatsLivres.libelle }}</p> 
                         {% if livre.emprunts is not empty %}
-
                             {% for emprunt in livre.emprunts %}
                                 <p>Emprunté le : {{ emprunt.dateDemande|date('Y-m-d') }}</p>
                                 <p>Restitution prévue : {{ emprunt.dateRestitutionPrevisionnelle|date('Y-m-d') }}</p>
                                 <button type="button" class="btn btn-danger" onclick="location.href='/livres/restituer/{{ livre.id }}'">Restituer</button>
                             {% endfor %}
-
-                            {% else %}
+                        {% else %}
                                 <p>Disponible</p>
                                 <button  class="btn btn-success" onclick="location.href='/livres/emprunter/{{ livre.id }}'">Emprunter</button>
-                            {% endif %}
+                        {% endif %}
+                            
                         {#ajouter un commentaire#}
                         <h5>Ajouter un commentaire :</h5>
                         <textarea name="commentaire" id="commentaire" cols="30" rows="10"></textarea><br>
@@ -69,7 +68,7 @@
                             <option value="5">5</option>
                         </select><br> #}
 
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#commentaireEmprunt{{ livre.id }}">Ajouter un commentaire</button>
+                        <button type="submit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#commentaireEmprunt{{ livre.id }}">Ajouter un commentaire</button>
 
                         {# commentaires #}
 
@@ -94,8 +93,10 @@
     </div> 
     {% endfor %}
     {# fin modal #}
+     <a href="{{ path('livres_en_retard') }}" class="btn btn-warning">Afficher les livres en retard</a>
     {# tous les livres #}
     {% for livre in livres %}
+
     <div class="container">
     <div class="row">
         <div class="col-md-4">
@@ -132,13 +133,16 @@
                                 {% endif %}
 
                             {# emprunts #}
-                                {% if livre.emprunts.dateRestitutionEffective is defined %}
-                                    <p>Emprunté le: {{ livre.emprunts.dateDemande|date('Y-m-d') }}</p>
-                                    <p>Restitution prévue: {{ livre.emprunts.dateRestitutionPrevisionnelle|date('Y-m-d') }}</p>
-                                    <button onclick="location.href='/livres/restituer/{{ livre.id }}'">Restituer</button>
-                                    {% else %}
-                                        <p>Disponible</p>
-                                {% endif %}
+                        {% if livre.emprunts is not empty %}
+                            {% for emprunt in livre.emprunts %}
+                                <p>Emprunté le : {{ emprunt.dateDemande|date('Y-m-d') }}</p>
+                                <p>Restitution prévue : {{ emprunt.dateRestitutionPrevisionnelle|date('Y-m-d') }}</p>
+                                <button type="button" class="btn btn-danger" onclick="location.href='/livres/restituer/{{ livre.id }}'">Restituer</button>
+                            {% endfor %}
+                        {% else %}
+                                <p>Disponible</p>
+                                <button  class="btn btn-success" onclick="location.href='/livres/emprunter/{{ livre.id }}'">Emprunter</button>
+                        {% endif %}
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop{{ livre.id }}">voir plus</button>  
 
                         </div>

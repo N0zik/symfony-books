@@ -1,3 +1,7 @@
 controllers:
     resource: ../src/Controller/
     type: attribute
+
+livres_en_retard:
+    path: /bibliotheque/en-retard
+    controller: App\Controller\BibliothequeController::livresEnRetard
