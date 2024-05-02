@@ -1,0 +1,127 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Symfony Book{% endblock %}
+
+{% block body %}
+    <h1>Bibliotheque</h1>
+    <nav>
+        <ul>
+            {# <li><a href="{{ path('app_livres_index') }}">Livres</a></li> #}
+            {# <li><a href="{{ path('app_auteurs_index') }}">Auteurs</a></li> #}
+            {# <li><a href="{{ path('app_emprunts_index') }}">Emprunts</a></li> #}
+           
+
+            {% include "components/_search.html.twig" with { form:form ?? null } only  %}
+        </ul>
+    </nav>
+    <div class="container"> 
+        {# modal #}
+        {% for livre in livres %}
+       
+        <div class="modal fade" id="staticBackdrop{{ livre.id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">{{ livre.nom }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <img src="{{ vich_uploader_asset(livre, 'imageFile') }}" class="img-fluid rounded-start" alt="{{ livre.nom }}">
+                       
+                        <h5>résumer :</h5>
+                        <p>{{ livre.resume }}</p>
+                        <p> <h5>Année de publication :</h5> {{ livre.anneePublication }} </p>
+                    
+                        <h5>Auteur(s) : 
+                            {% if livre.auteurs is empty %}
+                                <p>Aucun auteur trouvé.</p>
+                            {% else %}
+                                {% for auteurs in livre.auteurs %}
+                                    <p>{{ auteurs.nom }}</p>
+                                {% endfor %}
+                            {% endif %}
+                        </h5>
+
+                        <p>État : {{ livre.etatsLivres.libelle }}</p> 
+                        {% if livre.emprunts is not empty %}
+
+                            {% for emprunt in livre.emprunts %}
+                                <p>Emprunté le : {{ emprunt.dateDemande|date('Y-m-d') }}</p>
+                                <p>Restitution prévue : {{ emprunt.dateRestitutionPrevisionnelle|date('Y-m-d') }}</p>
+                                <button type="button" class="btn btn-danger" onclick="location.href='/livres/restituer/{{ livre.id }}'">Restituer</button>
+                            {% endfor %}
+
+                            {% else %}
+                                <p>Disponible</p>
+                                <button  class="btn btn-success" onclick="location.href='/livres/emprunter/{{ livre.id }}'">Emprunter</button>
+                            {% endif %}
+                        
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> 
+    {% endfor %}
+
+    {# tous les livres #}
+    {% for livre in livres %}
+    <div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card mb-3" style="max-width: 540px;">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="{{ vich_uploader_asset(livre, 'imageFile') }}" class="img-fluid rounded-start" alt="{{ livre.nom }}">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+
+                            {# titre #}
+
+                            <h5 class="card-title">{{ livre.nom }}</h5>
+
+                            {# auteur #}
+                             <h6>Auteur :</h6>
+                                    {% if livre.auteurs is empty %}
+                                            <p>Aucun auteur trouvé.</p>
+                                        {% else %}
+                                            {% for auteurs in livre.auteurs %}
+                                                <p>{{ auteurs.nom }}</p>
+                                            {% endfor %}
+                                        {% endif %}
+
+                            {# date de publication #}
+                            <p>Date de publication : {{ livre.anneePublication }}</p>
+
+                                {# etat des livres #}
+                                {% if etatsLivres is defined %}
+                                        <p>État : {{ livre.etatsLivres.libelle }}</p>
+                                    {% else %}
+                                        <p>État du livre non défini</p>
+                                {% endif %}
+
+                            {# emprunts #}
+                                {% if livre.emprunts.dateRestitutionEffective is defined %}
+                                    <p>Emprunté le: {{ livre.emprunts.dateDemande|date('Y-m-d') }}</p>
+                                    <p>Restitution prévue: {{ livre.emprunts.dateRestitutionPrevisionnelle|date('Y-m-d') }}</p>
+                                    <button onclick="location.href='/livres/restituer/{{ livre.id }}'">Restituer</button>
+                                    {% else %}
+                                        <p>Disponible</p>
+                                {% endif %}
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop{{ livre.id }}">voir plus</button>  
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>  
+    </div>     
+   {% endfor %}
+    
+    {# {% if livre.disponibilite == true %} #}
+   
+</div>
+{% endblock %}
