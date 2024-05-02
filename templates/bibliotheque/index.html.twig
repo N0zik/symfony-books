@@ -71,8 +71,8 @@
                             <p>Aucun commentaire trouvé.</p>
                         {% else %}
                             {% for commentaire in livre.commentaires %}
-                                <p>{{ commentaire.commentaire }}</p>
-                                <p>{{ commentaire.note }}</p>
+                                <h6>{{ commentaire.utilisateur.nom }}</h6>
+                                <p>{{ commentaire.commentaire }} {{ commentaire.dateAjout|date('Y-m-d') }}</p>
                             {% endfor %}
                         {% endif %}
 

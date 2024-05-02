@@ -2,10 +2,12 @@
 
 namespace App\Controller;
 
-use App\Entity\Emprunts;
 use App\Entity\Livres;
 use App\DTO\SearchData;
+use App\Entity\Emprunts;
 use App\Form\SearchType;
+use App\Entity\Commentaires;
+use App\Form\CommentairesType;
 use App\Repository\LivresRepository;
 use App\Repository\AuteursRepository;
 use App\Form\CommentairesEmpruntsType;
@@ -15,7 +17,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use App\Entity\CommentairesEmprunts;
 
 class BibliothequeController extends AbstractController
 {
@@ -85,17 +86,17 @@ class BibliothequeController extends AbstractController
     }
 
     #[Route('/bibliotheque/{livreId}', name: 'app_commentaire_emprunt', methods:['GET', 'POST'])]
-    public function commentaireEmprunt(Request $request, EntityManagerInterface $entityManager): Response
+    public function commentaires(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $commentaireEmprunt = new CommentairesEmprunts();
-        $form = $this->createForm(CommentairesEmpruntsType::class, $commentaireEmprunt);
+        $commentaires = new Commentaires();
+        $form = $this->createForm(CommentairesType::class, $commentaires);
         $form->handleRequest($request);
     
         if ($form->isSubmitted() && $form->isValid()) {
-            $commentaireEmprunt = $form->getData();
-            $commentaireEmprunt->setDateAjout(new \DateTime());
-            $commentaireEmprunt->setUtilisateurs($this->getUser());
-            $entityManager->persist($commentaireEmprunt);
+            $commentaires = $form->getData();
+            $commentaires->setDateAjout(new \DateTime());
+            $commentaires->setUtilisateurs($this->getUser());
+            $entityManager->persist($commentaires);
             $entityManager->flush();
     
             return $this->redirectToRoute('app_bibliotheque');

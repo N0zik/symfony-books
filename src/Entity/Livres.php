@@ -60,8 +60,12 @@ class Livres
     #[ORM\OneToMany(targetEntity: Emprunts::class, mappedBy: 'livres', orphanRemoval: true)]
     private Collection $emprunts;
 
+    #[ORM\OneToMany(targetEntity: CommentairesEmprunts::class, mappedBy: 'livres', orphanRemoval: true)]
+    private Collection $commentairesEmprunts;
+
     public function __construct()
-    {
+    {   
+        $this->commentairesEmprunts = new ArrayCollection();
         $this->commentaires = new ArrayCollection();
         $this->auteurs = new ArrayCollection();
         $this->notes = new ArrayCollection();
@@ -297,6 +301,18 @@ class Livres
                 $emprunt->setLivres(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCommentairesEmprunts(): Collection
+    {
+        return $this->commentairesEmprunts;
+    } 
+
+    public function setCommentairesEmprunts(?CommentairesEmprunts $commentairesEmprunts): static
+    {
+        $this->commentairesEmprunts = $commentairesEmprunts;
 
         return $this;
     }
