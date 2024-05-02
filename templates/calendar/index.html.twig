@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Calendar index{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        .custom-form-container {
+            width: 60%;
+            margin: auto;
+        }
+    </style>
+{% endblock %}
+
+
+{% block body %}
+    <div class="container mt-5">
+    <h1 class="text-center mb-5">Vos réservations</h1>
+    <div class="row">
+        {% for calendar in calendars %}
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <div class="card-body">
+                       {% for salleTravail in sallesTravail %}
+                        <div class="col-md-4 ">
+                            <div class="card mb-4">
+                                <img src="{{ vich_uploader_asset(salleTravail, 'imageFile') }}" 
+                            </div>
+                        </div>
+                        {% endfor %}
+                        <h5 class="card-title">{{ calendar.title }}</h5>
+                        <p class="card-text">Heure d'arrivée: {{ calendar.start ? calendar.start|date(' H:i :  Y-m-d') : 'N/A' }}</p>
+                        <p class="card-text">Heure de départ: {{ calendar.end ? calendar.end|date(' H:i : Y-m-d') : 'N/A' }}</p>
+                        <p class="card-text">Description: {{ calendar.description }}</p>
+                        <p class="card-text">Chaque jours: {{ calendar.allDay ? 'Yes' : 'No' }}</p>
+                        <div class="d-grid gap-2">
+                            <a href="{{ path('app_calendar_show', {'id': calendar.id}) }}" class="btn btn-outline-success btn-lg">Show</a>
+                            <a href="{{ path('app_calendar_edit', {'id': calendar.id}) }}" class="btn btn-outline-success btn-lg">Edit</a>
+                            <a href="{{ path('app_calendar_delete', {'id': calendar.id}) }}" class="btn btn-outline-success btn-lg">Delete</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="col">
+                <p>No records found</p>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="text-center">
+        <a href="{{ path('app_calendar_new') }}" class="btn btn-outline-success btn-lg">Nouvelle réservation</a>
+        <a href="{{ path('app_calendrier') }}" class="btn btn-outline-success btn-lg">Calendrier</a>
+    </div>
+</div>
+
+{% endblock %}
