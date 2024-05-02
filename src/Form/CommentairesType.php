@@ -2,23 +2,22 @@
 
 namespace App\Form;
 
+use App\Entity\Commentaires;
 use App\Entity\Livres;
-use App\Entity\Emprunts;
 use App\Entity\Utilisateurs;
-use App\Entity\CommentairesEmprunts;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class CommentairesEmpruntsType extends AbstractType
+class CommentairesType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('commentaire')
-            ->add('emprunts', EntityType::class, [
-                'class' => Emprunts::class,
+            ->add('livres', EntityType::class, [
+                'class' => Livres::class,
                 'choice_label' => 'id',
             ])
         ;
@@ -27,7 +26,7 @@ class CommentairesEmpruntsType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => CommentairesEmprunts::class,
+            'data_class' => Commentaires::class,
         ]);
     }
 }
