@@ -25,6 +25,9 @@ class Emprunts
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateRestitutionEffective = null;
 
+    #[ORM\Column(type: Types::BOOLEAN)]
+    private ?bool $restitue = true;
+
     #[ORM\Column]
     private ?bool $extensionEmprunt = null;
 
@@ -149,4 +152,15 @@ class Emprunts
         }
         return $this;
     } 
+      
+        public function getRestitue(): bool
+        {
+            return $this->restitue;
+        }
+    
+        public function setRestitue(bool $restitue): self
+        {
+            $this->restitue = $restitue;
+            return $this;
+        }
 }
