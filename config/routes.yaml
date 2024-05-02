@@ -1,0 +1,8 @@
+controllers:
+    resource: ../src/Controller/
+    type: attribute
+
+
+app_switch_language:
+    path: /switch-language/{_locale}
+    controller: App\Controller\TranslateController::switchLanguage
