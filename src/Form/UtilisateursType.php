@@ -67,6 +67,7 @@ class UtilisateursType extends AbstractType
                     'US' => false
                 ],
                 'label' => 'Langue du site',
+                'data' => true,
                 'expanded' => true,
                 'multiple' => false
             ]);

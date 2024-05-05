@@ -5,11 +5,11 @@ namespace App\Controller;
 use App\Entity\Utilisateurs;
 use App\Form\UtilisateursType;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class ProfileController extends AbstractController
 {
@@ -22,7 +22,7 @@ class ProfileController extends AbstractController
     }
 
     #[Route('/profile/{id}/identite/edit', name: 'app_profile_identite_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Utilisateurs $utilisateur, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, UserPasswordHasherInterface $userPasswordHasher, Utilisateurs $utilisateur, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(UtilisateursType::class, $utilisateur);
         $form->remove('email');
@@ -59,7 +59,8 @@ class ProfileController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if ($form->get('plainPassword')->getData() !== '' && $utilisateur->getPassword() !== $form->get('plainPassword')->getData()) {
+            if($utilisateur->getPassword() != $form->get('plainPassword')->getData() && $form->get('plainPassword')->getData() != '')
+            {
                 // encode the plain password
                 $utilisateur->setPassword(
                     $userPasswordHasher->hashPassword(
