@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Livres index{% endblock %}
+
+{% block body %}
+    <h1>Livres index</h1>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nom</th>
+            <th>AnneePublication</th>
+            <th>Resume</th>
+            <th>Image</th>
+            <th>Disponibilite</th>
+            <th>actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for livre in livres %}
+            <tr>
+                <td>{{ livre.id }}</td>
+                <td>{{ livre.nom }}</td>
+                <td>{{ livre.anneePublication }}</td>
+                <td>{{ livre.resume }}</td>
+                <td><img src="{{ vich_uploader_asset(livre, 'imageFile') }}" alt="{{ livre.nom }}"/></td>
+                <td>{{ livre.disponibilite ? 'Oui' : 'Non' }}</td>
+                <td>
+                    <a class="btn btn-primary" href="{{ path('app_livres_show', {'id': livre.id}) }}">Visuel</a>
+                    <a class="btn btn-primary" href="{{ path('app_livres_edit', {'id': livre.id}) }}">Editer</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">Pas de livre</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a class="btn btn-primary" href="{{ path('app_livres_new') }}">Créer un nouveau livre</a>
+{% endblock %}

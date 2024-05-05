@@ -1,0 +1,11 @@
+controllers:
+    resource: ../src/Controller/
+    type: attribute
+
+livres_en_retard:
+    path: /bibliotheque/en-retard
+    controller: App\Controller\BibliothequeController::livresEnRetard
+
+app_switch_language:
+    path: /switch-language/{_locale}
+    controller: App\Controller\TranslateController::switchLanguage

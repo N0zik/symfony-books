@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Editer informations de connexion{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1>Editer informations de connexion</h1>
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button class="btn btn-lg btn-primary">Enregistrer</button>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
