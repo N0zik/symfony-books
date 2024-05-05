@@ -4,16 +4,16 @@ namespace App\Controller;
 
 use App\Entity\Utilisateurs;
 use App\Form\UtilisateursType;
-use App\Repository\UtilisateursRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use App\Repository\UtilisateursRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 #[Route('/utilisateurs')]
 class UtilisateursController extends AbstractController
@@ -93,19 +93,20 @@ class UtilisateursController extends AbstractController
             $roleUser[] = 'ROLE_USER';
             $currentRoles = $form->get('roles')->getData();
 
-            if (empty($currentRoles)) {
+            if(empty($currentRoles))
                 $utilisateur->setRoles($roleUser);
-            } else {
+            else
+            {
                 // Ajouter ROLE_USER à la liste des rôles si n'est pas présent
-                if (!in_array('ROLE_USER', $currentRoles, true)) {
+                if (!in_array('ROLE_USER', $currentRoles))
                     $currentRoles[] = 'ROLE_USER';
-                }
 
                 // Mettre à jour les rôles de l'utilisateur
                 $utilisateur->setRoles(array_values($currentRoles));
             }
 
-            if ($form->get('plainPassword')->getData() !== '' && $utilisateur->getPassword() !== $form->get('plainPassword')->getData()) {
+            if($utilisateur->getPassword() != $form->get('plainPassword')->getData() && $form->get('plainPassword')->getData() != '')
+            {
                 // encode the plain password
                 $utilisateur->setPassword(
                     $userPasswordHasher->hashPassword(
@@ -130,7 +131,7 @@ class UtilisateursController extends AbstractController
     #[Route('/{id}', name: 'app_utilisateurs_delete', methods: ['POST'])]
     public function delete(Request $request, Utilisateurs $utilisateur, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $utilisateur->getId(), $request->getPayload()->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$utilisateur->getId(), $request->getPayload()->get('_token'))) {
             $entityManager->remove($utilisateur);
             $entityManager->flush();
         }
