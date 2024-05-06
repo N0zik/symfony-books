@@ -50,7 +50,7 @@ class BibliothequeController extends AbstractController
         ]);
     }
 
-    #[Route('/bibliotheque/{livreId}', name: 'app_commentaire_emprunt', methods: ['GET', 'POST'])]
+    #[Route('/bibliotheque/commentaire/{livreId}', name: 'app_commentaire_emprunt', methods: ['GET', 'POST'])]
     public function commentaires(Request $request, EntityManagerInterface $entityManager): Response
     {
         $commentaires = new Commentaires();
@@ -97,7 +97,7 @@ class BibliothequeController extends AbstractController
         return $this->redirectToRoute('app_bibliotheque');
     }
 
-    #[Route('/bibliotheque/en_retard.html.twig', name: 'app_en_retard', methods: ['GER'])]
+    #[Route('/bibliotheque/en_retard.html.twig', name: 'app_en_retard', methods: ['GET'])]
     public function livresEnRetard(EntityManagerInterface $entityManager): Response
     {
         $livresRepository = $entityManager->getRepository(Emprunts::class);
@@ -108,57 +108,21 @@ class BibliothequeController extends AbstractController
         ]);
     }
 
-    #[Route('/bibliotheque/{livreId}', name: 'app_restituer_livre', methods: ['GET'])]
-    public function Restituer(int $livreId, EntityManagerInterface $entityManager, Emprunts $Emprunts): Response
+    #[Route('/bibliotheque/{livreId}', name: 'app_restituer', methods: ['GET'])]
+    public function restituer(int $id, EntityManagerInterface $entityManager)
     {
-        // // Récupérer le livre et le dernier emprunt associé
-        // $livre = $entityManager->getRepository(Livre::class)->find($livreId);
-        // if (!$livre) {
-        //     throw $this->createNotFoundException('Le livre avec l\'ID ' . $livreId . ' n\'existe pas.');
-        // }
+    $emprunt = $entityManager->getRepository(Emprunts::class)->find($id);
+    if (!$emprunt) {
+        throw $this->createNotFoundException('Aucun emprunt trouvé pour cet id');
+    }
 
-        // $emprunt = $entityManager->getRepository(Emprunt::class)->findOneBy(['livre' => $livre, 'setDateRestitutionEffective' => null]);
-        // if (!$emprunt) {
-        //     throw $this->createNotFoundException('Aucun emprunt actif pour ce livre.');
-        // }
+    $emprunt->setRestitue(true);
+    $emprunt->setDateRestitutionEffective(new \DateTime());
 
-        // // Marquer l'emprunt comme terminé
-        // $emprunt->setDateRestitutionEffective(new \DateTime());
+    $entityManager->flush();
 
-        // // Marquer le livre comme disponible
-        // $livre->setDisponibilite(true);
-
-        // // Persister les modifications dans la base de données
-        // $entityManager->persist($emprunt);
-        // $entityManager->persist($livre);
-        // $entityManager->flush();
-
-        // // Rediriger vers la liste des livres, ou une autre route appropriée
-        // return $this->redirectToRoute('app_bibliotheque');
-
-        $emprunt = $entityManager->getRepository(Emprunts::class)->findOneBy([
-            'livre' => $livreId,
-            'restitue' => false
-        ]);
-
-        if (!$emprunt) {
-            $this->addFlash('error', 'Ce livre n\'a pas été emprunté ou a déjà été restitué.');
-            return $this->redirectToRoute('app_bibliotheque');
-        }
-
-        // Marquer l'emprunt comme restitué
-        $emprunt->setRestitue(true);
-        $emprunt->setDateRestitutionEffective(new DateTime());
-
-        // Optionnellement, mettre à jour la disponibilité du livre
-        $emprunt->getLivre()->setDisponibilite(true);
-
-        $entityManager->flush();
-
-        $this->addFlash('success', 'Le livre a été restitué avec succès.');
-        return $this->redirectToRoute('app_bibliotheque');
-
-
+    // Redirect to a route after setting the return
+    return $this->redirectToRoute('app_livre_list'); // Change this to wherever you need to redirect
     }
 
     public function show($livreId, LivresRepository $livreRepository, EtatsLivresRepository $EtatRepo): Response

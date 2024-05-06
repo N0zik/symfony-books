@@ -6,15 +6,12 @@
     <h1 class="d-flex justify-content-center mb-5">Bibliothèque</h1>
     <nav>
         <ul>
-            {# <li><a href="{{ path('app_livres_index') }}">Livres</a></li> #}
-            {# <li><a href="{{ path('app_auteurs_index') }}">Auteurs</a></li> #}
-            {# <li><a href="{{ path('app_emprunts_index') }}">Emprunts</a></li> #}
-
-
             {% include "components/_search.html.twig" with { form:form ?? null } only %}
         </ul>
     </nav>
     <div class="container">
+        {# Bouton pour afficher les livres non restitués #}
+        <a href="{{ path('app_en_retard') }}" class="btn btn-primary">Livres non restitués</a>
         {# modal #}
         {% for livre in livres %}
 
@@ -45,7 +42,7 @@
                                 {% endif %}
                             </h5>
                             <p>État : {{ livre.etatsLivres.libelle }}</p>
-                            {% if livre.emprunts is not empty %}
+                            {# {% if livre.emprunts is not empty %}
                                 {% for emprunt in livre.emprunts %}
                                     <p>Emprunté le : {{ emprunt.dateDemande|date('Y-m-d') }}</p>
                                     <p>Restitution prévue
@@ -63,7 +60,43 @@
                             {% else %}
                                 <p>Disponible</p>
                                 <a href="{{ path('app_emprunts', {'livreId': livre.id}) }}" class="btn btn-success">Emprunter</a>
+                            {% endif %} #}
+                            {# {% if livre.emprunts is not empty %}
+                                {% for emprunt in livre.emprunts %}
+                                    <p>Emprunté le : {{ emprunt.dateDemande|date('Y-m-d') }}</p>
+                                    <p>Restitution prévue : {{ emprunt.dateRestitutionPrevisionnelle|date('Y-m-d') }}</p>
+
+                                    {% if not emprunt.restitue %}
+                                        <!-- Affiche le bouton pour restituer si le livre n'a pas encore été restitué -->
+                                        <a href="{{ path('app_restituer_livre', {'livreId': livre.id}) }}" class="btn btn-danger">
+                                            Restituer
+                                        </a>
+                                    {% else %}
+                                        <!-- Informe que le livre a déjà été restitué -->
+                                        <p>Livre déjà restitué.</p>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %} #}
+                            {% if livre.emprunts is not empty %}
+                                {% for emprunt in livre.emprunts %}
+                                    <p>Emprunté le : {{ emprunt.dateDemande|date('Y-m-d') }}</p>
+                                    <p>Restitution prévue : {{ emprunt.dateRestitutionPrevisionnelle|date('Y-m-d') }}</p>
+
+                                    {% if not emprunt.restitue %}
+                                        <!-- Affiche le bouton pour restituer si le livre n'a pas encore été restitué -->
+                                        <a href="{{ path('app_restituer_livre', {'livreId': livre.id}) }}" class="btn btn-danger">Restituer</a>                                          
+                                        </a>
+                                    {% else %}
+                                        <!-- Informe que le livre a déjà été restitué -->
+                                        <p>Livre déjà restitué.</p>
+                                    {% endif %}
+                                {% endfor %}
                             {% endif %}
+                            {% if livre.disponibilite %} 
+                                <a href="{{ path('app_emprunts', {'livreId': livre.id}) }}" class="btn btn-success">Emprunter</a>                            {% else %}
+                                <p> {{ livre.nom }} n'est pas disponible pour le moment.</p>
+                            {% endif %}
+                                
                             {# ajouter un commentaire #}
                             <form action="{{ path('app_commentaire_emprunt', {'livreId': livre.id}) }}" method="post">
                                 <button type="submit" class="btn btn-primary mt-3">Ajout Commentaire</button>
@@ -75,7 +108,7 @@
                                 <p>Aucun commentaire trouvé.</p>
                             {% else %}
                                 {% for commentaire in livre.commentaires %}
-                                    {#<h6>{{ commentaire.utilisateur.nom }}</h6> #}  
+                                    <h6>{{ commentaire.utilisateurs.nom }}</h6>
                                     <p>{{ commentaire.commentaire }} {{ commentaire.dateAjout|date('Y-m-d') }}</p>
                                 {% endfor %}
                             {% endif %}
@@ -114,13 +147,12 @@
                                     <p class="card-text">Emprunté le: {{ livre.emprunts.dateDemande|date('Y-m-d') }}</p>
                                     <p class="card-text">Restitution
                                         prévue: {{ livre.emprunts.dateRestitutionPrevisionnelle|date('Y-m-d') }}</p>
-                                    <button onclick="location.href='/livres/restituer/{{ livre.id }}'"
-                                            class="btn btn-danger">Restituer
-                                    </button>
+                                    <a href="{{ path('app_restituer_livre', {'livreId': livre.id}) }}" class="btn btn-danger">Restituer</a> 
                                 {% else %}
                                     <p class="card-text">Disponible <img
                                                 src="{{ asset('/images/icon/check-vert.png') }}" style="width: 20px;"
                                                 class="d-flex justify-content-center" alt="Vert"></p>
+                                    <a href="{{ path('app_emprunts', {'livreId': livre.id}) }}" class="btn btn-success">Emprunter</a>
                                 {% endif %}
                                 <button type="button" class="btn btn-primary " data-bs-toggle="modal"
                                         data-bs-target="#staticBackdrop{{ livre.id }}">voir plus
@@ -136,3 +168,4 @@
 
     </div>
 {% endblock %}
+index.html.twig
