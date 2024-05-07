@@ -10,6 +10,20 @@
         {% if 'ROLE_ADMIN' in app.user.roles %}
             <h1>Administration</h1>
 
+            <br>
+            <br>
+
+            <a href="/utilisateurs" class="btn btn-lg btn-primary">Gestion des utilisateurs</a>
+            
+            <br>
+            <br>
+
+            <a href="/salles/travail" class="btn btn-lg btn-primary">Gestion des salles de travail</a>
+
+            <br>
+            <br>
+
+            <a href="/livres" class="btn btn-lg btn-primary">Gestion des livres</a>
 
         {% else %}
             <h1>Vous n'êtes pas Administrateur, accès interdit !</h1>

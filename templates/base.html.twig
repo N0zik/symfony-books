@@ -15,19 +15,12 @@
         {{ encore_entry_link_tags('app') }}
 
         <style>
-            .example-wrapper {
-                margin: 1em auto;
-                max-width: 800px;
-                width: 95%;
-                font: 18px/1.5 sans-serif;
-            }
-
-            .example-wrapper code {
-                background: #F5F5F5;
-                padding: 2px 6px;
-            }
-
+            html {
+                height: 100%;
+                }
+            
             body {
+                min-height: 100%;
                 margin: 0;
                 padding: 0;
                 position: relative;
@@ -40,7 +33,7 @@
                 left: 0;
                 width: 100%;
                 height: 100%;
-                background-image: url('{{ asset("/images/background/background_bibli_moderne.jpeg")}}');
+                background-image: url('{{ asset("/images/background/background_bibli_moderne.jpeg") }}');
                 background-size: cover;
                 background-position: center;
                 background-repeat: no-repeat;
@@ -50,15 +43,39 @@
                 z-index: -1;
             }
 
+            .example-wrapper {
+                margin: 1em auto;
+                max-width: 800px;
+                width: 95%;
+                font: 18px/1.5 sans-serif;
+            }
+
+            .example-wrapper code {
+                background: #F5F5F5;
+                padding: 2px 6px;
+            }
+
             .main-container {
-                padding: 20px; /* Ajoutez un padding si nécessaire */
-                /* Ajoutez d'autres styles selon vos besoins */
+                padding: 20px;
+            }
+
+            footer {
+                background: #000000;
+                height: 100px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 30px;
+                color: white;
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
             }
         </style>
     {% endblock %}
 
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.5/main.js"
-            integrity="sha256-30CUlf86MutBEnPLsKHB7Ug3IT20n3T1YkHvjVkcErA=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.5/main.js" integrity="sha256-30CUlf86MutBEnPLsKHB7Ug3IT20n3T1YkHvjVkcErA=" crossorigin="anonymous"></script>
 
     {% block javascripts %}
         {{ encore_entry_script_tags('app') }}
@@ -69,7 +86,7 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container"> <!-- Encadrer le contenu pour le centrage et l'alignement -->
-        <a class="navbar-brand" href="#">Symfony-Books</a>
+        <a class="navbar-brand" href="/" alt="Symfony-Books" title="Symfony-Books"><img src="{{ asset('/images/logos/logo.png') }}" height="100"></a>
 
         <!-- Bouton de bascule pour les petits écrans -->
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
@@ -84,8 +101,18 @@
                     <a class="nav-link" href="/">Accueil <span class="sr-only"></span></a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" href="/admin">Administration</a>
+                    <a class="nav-link" href="/abonnements">Abonnements</a>
                 </li>
+                {% if app.user is defined and app.user.roles is defined %}
+                    {% if 'ROLE_ADMIN' in app.user.roles %}
+                        <li class="nav-item active">
+                            <a class="nav-link" href="/admin">Administration</a>
+                        </li>
+                    {% endif %}
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/profile">Profil</a>
+                    </li>
+                {% endif %}
                 <li class="nav-item">
                     <a class="nav-link" href="/bibliotheque">Bibliothèque</a>
                 </li>
@@ -93,13 +120,18 @@
                     <a class="nav-link" href="/salles/travail">Salles travail</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/salles/travail">Calendar</a>
+                    <a class="nav-link" href="/api/calendrier">Calendrier</a>
                 </li>
+                {% if app.user is defined and app.user.roles is defined %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Se déconnecter</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">Se connecter</a>
+                    </li>
+                {% endif %}
             </ul>
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Rechercher" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Rechercher</button>
-            </form>
         </div>
     </div>
 </nav>
@@ -110,5 +142,9 @@
     </div>
 {% endblock %}
 </body>
+
+<footer>
+    @ Symfony-Books 2024 - By David, Jason & Loic
+</footer>
 
 </html>
