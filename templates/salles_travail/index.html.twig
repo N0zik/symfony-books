@@ -83,6 +83,11 @@
               </ul>
             <div class="card-body d-flex justify-content-center">
                 <a href="{{ path('app_calendar_new') }}" class="btn btn-outline-success btn-lg btn-block  ">Réservez un créneau</a>
+                {% if app.user is defined and app.user.roles is defined %}
+                    {% if 'ROLE_ADMIN' in app.user.roles %}
+                    <a href="{{ path('app_salles_travail_edit', {'id': salleTravail.id}) }}" class="btn btn-outline-success btn-lg btn-block  ">Edit</a>
+                    {% endif %}
+                {% endif %}
             </div>
           </div>
         </div>

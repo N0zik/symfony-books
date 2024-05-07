@@ -57,7 +57,7 @@ class SallesTravailController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_salles_travail_edit', methods: ['GET', 'POST'])]
+    #[Route('salles/travail/{id}/edit', name: 'app_salles_travail_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, SallesTravail $sallesTravail, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(SallesTravailType::class, $sallesTravail);
