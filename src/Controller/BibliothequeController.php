@@ -2,20 +2,21 @@
 
 namespace App\Controller;
 
-use App\DTO\SearchData;
-use App\Entity\Commentaires;
-use App\Entity\Emprunts;
-use App\Form\CommentairesType;
-use App\Form\SearchType;
-use App\Repository\AuteursRepository;
-use App\Repository\EtatsLivresRepository;
-use App\Repository\LivresRepository;
 use DateTime;
+use App\DTO\SearchData;
+use App\Entity\Emprunts;
+use App\Form\SearchType;
+use App\Entity\Commentaires;
+use App\Form\CommentairesType;
+use App\Repository\LivresRepository;
+use App\Repository\AuteursRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Repository\EtatsLivresRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class BibliothequeController extends AbstractController
 {
@@ -56,6 +57,11 @@ class BibliothequeController extends AbstractController
         $commentaires = new Commentaires();
         $form = $this->createForm(CommentairesType::class, $commentaires);
         $form->handleRequest($request);
+        
+        $user = $this->getUser();
+        if (!$user) {
+            throw new AccessDeniedException('Vous devez être connecté pour emprunter un livre.');
+        }
 
         if ($form->isSubmitted() && $form->isValid()) {
             $commentaires = $form->getData();
@@ -72,32 +78,43 @@ class BibliothequeController extends AbstractController
         ]);
     }
 
-    #[Route('/bibliotheque/{livreId}', name: 'app_emprunts', methods: ['GET'])]
-    public function Emprunts(Request $request, LivresRepository $livreRepository, Emprunts $Emprunts, int $livreId, EntityManagerInterface $entityManager): Response
+    #[Route('/bibliotheque/emprunt/{livreId}', name: 'app_emprunts', methods: ['GET'])]
+    public function emprunts(Request $request, LivresRepository $livreRepository, EntityManagerInterface $entityManager, int $livreId): Response
     {
+        // Vérifier si l'utilisateur est connecté
+        $user = $this->getUser();
+        if (!$user) {
+            throw new AccessDeniedException('Vous devez être connecté pour emprunter un livre.');
+        }
+
+        // Trouver le livre par son ID
         $livre = $livreRepository->find($livreId);
         if (!$livre) {
             throw $this->createNotFoundException('Le livre demandé n\'existe pas');
         }
 
+        // Créer un nouvel emprunt
         $emprunt = new Emprunts();
         $emprunt->setLivres($livre);
-        $emprunt->setUtilisateurs($this->getUser());
+        $emprunt->setUtilisateurs($user);
         $emprunt->setDateDemande(new DateTime());
         $emprunt->setDateRestitutionPrevisionnelle(new DateTime('+6 days'));
         $emprunt->setExtensionEmprunt(false);
 
+        // Enregistrer l'emprunt dans la base de données
         $entityManager->persist($emprunt);
         $entityManager->flush();
 
+        // Mettre à jour la disponibilité du livre
         $livre->setDisponibilite(false);
         $entityManager->persist($livre);
         $entityManager->flush();
 
+        // Rediriger vers la page de la bibliothèque
         return $this->redirectToRoute('app_bibliotheque');
     }
 
-    #[Route('/bibliotheque/en_retard.html.twig', name: 'app_en_retard', methods: ['GET'])]
+    #[Route('/bibliotheque/en_retard', name: 'app_en_retard', methods: ['GET'])]
     public function livresEnRetard(EntityManagerInterface $entityManager): Response
     {
         $livresRepository = $entityManager->getRepository(Emprunts::class);
@@ -108,21 +125,23 @@ class BibliothequeController extends AbstractController
         ]);
     }
 
-    #[Route('/bibliotheque/{livreId}', name: 'app_restituer', methods: ['GET'])]
-    public function restituer(int $id, EntityManagerInterface $entityManager)
+    #[Route('/bibliotheque/restituer/{empruntId}', name: 'app_restituer', methods: ['POST'])]
+    public function restituer(int $empruntId, EntityManagerInterface $entityManager)
     {
-    $emprunt = $entityManager->getRepository(Emprunts::class)->find($id);
-    if (!$emprunt) {
-        throw $this->createNotFoundException('Aucun emprunt trouvé pour cet id');
-    }
-
-    $emprunt->setRestitue(true);
-    $emprunt->setDateRestitutionEffective(new \DateTime());
-
-    $entityManager->flush();
-
-    // Redirect to a route after setting the return
-    return $this->redirectToRoute('app_livre_list'); // Change this to wherever you need to redirect
+        $empruntRepository = $entityManager->getRepository(Emprunts::class);
+        $emprunt = $empruntRepository->find($empruntId);
+        if (!$emprunt) {
+            throw $this->createNotFoundException('Aucun emprunt trouvé pour cet ID.');
+        }
+    
+        $livre = $emprunt->getLivres(); // Supposant que votre entité Emprunts a une méthode getLivres()
+        $livre->setDisponibilite(true);
+        
+        $emprunt->setDateRestitutionEffective(new \DateTime());
+        
+        $entityManager->flush();
+    
+        return $this->redirectToRoute('app_bibliotheque');
     }
 
     public function show($livreId, LivresRepository $livreRepository, EtatsLivresRepository $EtatRepo): Response
