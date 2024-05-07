@@ -16,18 +16,24 @@
                     <div class="col-md-4">
                         <div class="card mb-4 shadow-sm">
                             {% if livre.image %}
-                                <img src="{{ asset('uploads/images/' ~ livre.image) }}" alt="Image de {{ livre.titre }}"
+                
+                                <img src="{{ asset('uploads/images/' ~ livre.image) }}" alt="Image de {{ livre.titre | default('Image non disponible') }}"
+                                     class="bd-placeholder-img card-img-top">
+                            {% else %}
+                                <img src="{{ asset('path/to/default/image.jpg') }}" alt="Image par défaut"
                                      class="bd-placeholder-img card-img-top">
                             {% endif %}
                             <div class="card-body">
-                                <h5 class="card-title">{{ livre.titre }}</h5>
-                                <p class="card-text">{{ livre.resume }}</p>
+=                                <h5 class="card-title">{{ livre.titre | default('Titre inconnu') }}</h5>
+                                <p class="card-text">{{ livre.resume | default('Pas de résumé disponible') }}</p>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <small class="text-muted">Emprunté le
-                                        : {{ livre.emprunt.dateEmprunt|date('d/m/Y') }}</small>
-                                    <small class="text-muted">Retour prévu
-                                        : {{ livre.emprunt.dateRestitutionPrevisionnelle|date('d/m/Y') }}</small>
-                                    {% if livre.emprunt.dateRestitutionPrevisionnelle < "now"|date %}
+                                    <small class="text-muted">Emprunté le : 
+                                        {{ livre.emprunt.dateEmprunt|date('d/m/Y') }}
+                                    </small>
+                                    <small class="text-muted">Retour prévu : 
+                                        {{ livre.emprunt.dateRestitutionPrevisionnelle|date('d/m/Y') }}
+                                    </small>
+                                    {% if livre.emprunt.dateRestitutionPrevisionnelle < date() %}
                                         <span class="badge bg-danger">En retard</span>
                                     {% endif %}
                                 </div>
