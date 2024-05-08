@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Livres;
+use App\Entity\Emprunt;
 use App\Entity\Utilisateurs;
 use App\Form\UtilisateursType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -16,8 +18,15 @@ class ProfileController extends AbstractController
     #[Route('/profile', name: 'app_profile')]
     public function index(): Response
     {
+        $user = $this->getUser(); 
+        if (!$user) {
+            throw $this->createNotFoundException('No user is logged in.');
+        }
+        $emprunts = $user->getEmprunts(); 
+  
         return $this->render('profile/index.html.twig', [
             'controller_name' => 'ProfileController',
+            'emprunts' => $emprunts, 
         ]);
     }
 
@@ -40,6 +49,7 @@ class ProfileController extends AbstractController
         return $this->render('profile/identite/edit.html.twig', [
             'utilisateur' => $utilisateur,
             'form' => $form,
+           
         ]);
     }
 
@@ -80,5 +90,5 @@ class ProfileController extends AbstractController
             'utilisateur' => $utilisateur,
             'form' => $form,
         ]);
+        } 
     }
-}
