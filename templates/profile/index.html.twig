@@ -78,23 +78,47 @@
         <h2 class="card-title">Votre historique d'emprunts de livres</h2>
 
         {# liste des emprunts de l'utilisateur  #}
-
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Livre</th>
+                    <th>Emprunté le</th>
+                    <th>Restitution prévisionnelle</th>
+                    <th>Restitution effective</th>
+                    <th>Extension</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
             {% if emprunts is not empty %}
-                <ul>
-                    {% for emprunt in emprunts %}
-                        <li>Emprunté par {{ emprunt.utilisateurs.nom }}, livre: {{ emprunt.livres.nom }}</li>
-                        <li>Emprunté le {{ emprunt.dateDemande|date('d/m/Y') }}</li>
-                        {% if emprunt.dateRestitutionEffective is not empty  %}
-                            <li>Retourné le {{ emprunt.dateRestitutionEffective|date('d/m/Y') }}</li>
+                {% for emprunt in emprunts %}
+                    <tr>
+                        <td>{{ emprunt.livres.nom }}</td>
+                        <td>{{ emprunt.dateDemande|date('d/m/Y') }}</td>
+                        <td>{{ emprunt.dateRestitutionPrevisionnelle|date('d/m/Y') }}</td>
+                        {% if emprunt.dateRestitutionEffective is not empty %}
+                            <td style="color:green">{{ emprunt.dateRestitutionEffective|date('d/m/Y') }}</td>
                         {% else %}
-                            <p>Non retourné est sera retourné le : {{ emprunt.dateRestitutionPrevisionnelle|date('Y-m-d') }}</p>
+                            <td style="color:red">Non restitué</td>
                         {% endif %}
-                    {% endfor %}
-                </ul>
+                        {% if emprunt.extensionEmprunt %}
+                            <td>OUI</td>
+                        {% else %}
+                            <td>NON</td>
+                        {% endif %}
+                        {% if emprunt.restitue %}
+                            <td style="color:green">Déjà restitué</td>
+                        {% else %}
+                            <td><form method="post" action="{{ path('app_restituer', {'empruntId': emprunt.id}) }}"><button type="submit" class="btn btn-danger">Restituer</button></form></td>
+                        {% endif %}
+                {% endfor %}
             {% else %}
-                <p>Aucun emprunt trouvé.</p>
+                <tr>
+                    <td colspan="13">Aucun emprunt trouvé.</td>
+                </tr>
             {% endif %}
-
+            </tbody>
+        </table>
         
         <br>
         <br>
@@ -104,5 +128,6 @@
         <h2 class="card-title">Votre historique de réservations de salles de travail</h2>
 
         liste à générer
+
     </div>
 {% endblock %}

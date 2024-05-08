@@ -45,37 +45,40 @@
                             {% if app.user is defined and app.user.roles is defined %}
                                 {# emprunt #}
                                     {% if livre.emprunts is not empty %}
-                                        <div style="border: 1px solid; padding: 10px">
                                         {% for emprunt in livre.emprunts %}
                                             {% if not emprunt.dateRestitutionEffective and emprunt.utilisateurs.id == app.user.id %}
-                                                <p>Emprunté le : {{ emprunt.dateDemande|date('Y-m-d') }}</p>
-                                                <p>Restitution prévue : {{ emprunt.dateRestitutionPrevisionnelle|date('Y-m-d') }}</p>
-                                                <form method="post" action="{{ path('app_restituer', {'empruntId': emprunt.id}) }}">
-                                                    <button type="submit" class="btn btn-danger">Restituer</button>
-                                                </form>
+                                                <div style="border: 1px solid; padding: 10px">
+                                                    <p>Emprunté le : {{ emprunt.dateDemande|date('d-m-Y') }}</p>
+                                                    <p>Restitution prévue le: {{ emprunt.dateRestitutionPrevisionnelle|date('d-m-Y') }}</p>
+                                                    <form method="post" action="{{ path('app_restituer', {'empruntId': emprunt.id}) }}">
+                                                        <button type="submit" class="btn btn-danger">Restituer</button>
+                                                    </form>
+                                                </div>
+                                                <br>
                                             {% else %} 
                                                 {% if emprunt.restitue == 0 %}
-                                                    <p>Sera restitué le : {{ emprunt.dateRestitutionEffective|date('Y-m-d') }}</p>
-                                                    <button type="button" class="btn btn-danger">Indisponible</button> 
+                                                    <div style="border: 1px solid; padding: 10px">
+                                                        <p>Emprunté le : {{ emprunt.dateDemande|date('d-m-Y') }}</p>
+                                                        <p>Restitution prévue le : {{ emprunt.dateRestitutionEffective|date('d-m-Y') }}</p>
+                                                    </div>
+                                                    <br>
                                                 {% endif %}
                                             {% endif %}
                                         {% endfor %}
-                                        </div>
-                                        <br>
                                     {% endif %}
 
                                 {# Option pour emprunter un livre #}
 
                                     <div style="border: 1px solid; padding: 10px">
                                     {% if livre.disponibilite %}
-                                        <p style="color:green">{{ livre.nom }} est disponible pour le moment.</p>
+                                        <p style="color:green; font-weigt:bold">Disponible</p>
                                         <a href="{{ path('app_emprunts', {'livreId': livre.id}) }}" class="btn btn-success">Emprunter</a>
                                     {% else %}
-                                        <p style="color:red">{{ livre.nom }} n'est pas disponible pour le moment.</p>
+                                        <p style="color:red; font-weigt:bold">Indisponible</p>
                                     {% endif %}
                                     </div>
 
-                                <br>
+                                    <br>
 
                                 {# Affichage des Commentaires #}
                                 
@@ -85,8 +88,9 @@
                                             <p>Aucun commentaire trouvé.</p>
                                         {% else %}
                                             {% for commentaire in livre.commentaires %}
-                                                <h6>{{ commentaire.utilisateurs.nom }}</h6>
-                                                <p>{{ commentaire.commentaire }} {{ commentaire.dateAjout|date('Y-m-d') }}</p>
+                                                <h5>Par : {{ commentaire.utilisateurs.prenom ~' '~ commentaire.utilisateurs.nom }}</h5>
+                                                <h6>Le : {{ commentaire.dateAjout|date('d-m-Y') }}</h6>
+                                                <p>{{ commentaire.commentaire }} </p>
                                             {% endfor %}
                                         {% endif %}
                                         
@@ -131,33 +135,36 @@
                                 {% if app.user is defined and app.user.roles is defined %}
                                     {# emprunt #}
                                     {% if livre.emprunts is not empty %}
-                                        <div style="border: 1px solid; padding: 10px">
                                         {% for emprunt in livre.emprunts %}
                                             {% if not emprunt.dateRestitutionEffective and emprunt.utilisateurs.id == app.user.id %}
-                                            <p>Emprunté le : {{ emprunt.dateDemande|date('Y-m-d') }}</p>
-                                            <p>Restitution prévue : {{ emprunt.dateRestitutionPrevisionnelle|date('Y-m-d') }}</p>
-                                                <form method="post" action="{{ path('app_restituer', {'empruntId': emprunt.id}) }}">
-                                                    <button type="submit" class="btn btn-danger">Restituer</button>
-                                                </form>
+                                            <div style="border: 1px solid; padding: 10px">
+                                                <p>Emprunté le : {{ emprunt.dateDemande|date('Y-m-d') }}</p>
+                                                <p>Restitution prévue le : {{ emprunt.dateRestitutionPrevisionnelle|date('d-m-Y') }}</p>
+                                                    <form method="post" action="{{ path('app_restituer', {'empruntId': emprunt.id}) }}">
+                                                        <button type="submit" class="btn btn-danger">Restituer</button>
+                                                    </form>
+                                            </div>
+                                            <br>
                                             {% else %} 
                                                 {% if emprunt.restitue == 0 %}
-                                                    <p>Sera restitué le : {{ emprunt.dateRestitutionEffective|date('Y-m-d') }}</p>
-                                                    <button type="button" class="btn btn-danger">Indisponible</button> 
+                                                    <div style="border: 1px solid; padding: 10px">
+                                                        <p>Emprunté le : {{ emprunt.dateDemande|date('Y-m-d') }}</p>
+                                                        <p>Restitution prévue le : {{ emprunt.dateRestitutionEffective|date('d-m-Y') }}</p>
+                                                    </div>
+                                                    <br>
                                                 {% endif %}
                                             {% endif %}
                                         {% endfor %}
-                                        </div>
-                                        <br>
                                     {% endif %}
 
                                     {# Option pour emprunter un livre #}
 
                                     <div style="border: 1px solid; padding: 10px">
                                     {% if livre.disponibilite %}
-                                        <p style="color:green">{{ livre.nom }} est disponible pour le moment.</p>
+                                        <p style="color:green; font-weigt:bold">Disponible</p>
                                         <a href="{{ path('app_emprunts', {'livreId': livre.id}) }}" class="btn btn-success">Emprunter</a>
                                     {% else %}
-                                        <p style="color:red">{{ livre.nom }} n'est pas disponible pour le moment.</p>
+                                        <p style="color:red; font-weigt:bold">Indisponible</p>
                                     {% endif %}
                                     </div>
 
