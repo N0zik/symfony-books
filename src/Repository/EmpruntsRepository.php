@@ -19,6 +19,17 @@ class EmpruntsRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Emprunts::class);
+    } 
+
+    public function findLivresEnRetard()
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->join('e.livres', 'l') 
+           ->where('e.dateRestitutionPrevisionnelle < :today')
+           ->andWhere('e.dateRestitutionEffective IS NULL')
+           ->setParameter('today', new \DateTime(), \Doctrine\DBAL\Types\Types::DATETIME_MUTABLE);
+
+        return $qb->getQuery()->getResult();
     }
 
 //    /**

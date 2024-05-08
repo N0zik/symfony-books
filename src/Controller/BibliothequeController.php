@@ -52,7 +52,7 @@ class BibliothequeController extends AbstractController
     }
 
     #[Route('/bibliotheque/commentaire/{livreId}', name: 'app_commentaire_emprunt', methods: ['GET', 'POST'])]
-    public function commentaires(Request $request, EntityManagerInterface $entityManager): Response
+    public function commentaires(Request $request, EntityManagerInterface $entityManager, int $livreId): Response
     {
         $commentaires = new Commentaires();
         $form = $this->createForm(CommentairesType::class, $commentaires);
@@ -75,6 +75,7 @@ class BibliothequeController extends AbstractController
 
         return $this->render('bibliotheque/commentaireEmprunt.html.twig', [
             'form' => $form->createView(),
+            'id' => $livreId
         ]);
     }
 
@@ -126,23 +127,38 @@ class BibliothequeController extends AbstractController
     }
 
     #[Route('/bibliotheque/restituer/{empruntId}', name: 'app_restituer', methods: ['POST'])]
-    public function restituer(int $empruntId, EntityManagerInterface $entityManager)
-    {
-        $empruntRepository = $entityManager->getRepository(Emprunts::class);
-        $emprunt = $empruntRepository->find($empruntId);
-        if (!$emprunt) {
-            throw $this->createNotFoundException('Aucun emprunt trouvé pour cet ID.');
+        public function restituer(Request $request, EntityManagerInterface $entityManager, int $empruntId): Response
+        {
+            $emprunt = $entityManager->getRepository(Emprunts::class)->find($empruntId);
+            if (!$emprunt || $emprunt->getUtilisateurs() != $this->getUser() || $emprunt->getDateRestitutionEffective()) {
+                throw $this->createAccessDeniedException('Action non autorisée.');
+            }
+
+            $emprunt->setDateRestitutionEffective(new \DateTime());
+            $emprunt->getLivres()->setDisponibilite(true);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_bibliotheque');
         }
+
+    // #[Route('/bibliotheque/restituer/{empruntId}', name: 'app_restituer', methods: ['POST'])]
+    // public function restituer(int $empruntId, EntityManagerInterface $entityManager)
+    // {
+    //     $empruntRepository = $entityManager->getRepository(Emprunts::class);
+    //     $emprunt = $empruntRepository->find($empruntId);
+    //     if (!$emprunt) {
+    //         throw $this->createNotFoundException('Aucun emprunt trouvé pour cet ID.');
+    //     }
     
-        $livre = $emprunt->getLivres(); // Supposant que votre entité Emprunts a une méthode getLivres()
-        $livre->setDisponibilite(true);
+    //     $livre = $emprunt->getLivres(); // Supposant que votre entité Emprunts a une méthode getLivres()
+    //     $livre->setDisponibilite(true);
         
-        $emprunt->setDateRestitutionEffective(new \DateTime());
+    //     $emprunt->setDateRestitutionEffective(new \DateTime());
         
-        $entityManager->flush();
+    //     $entityManager->flush();
     
-        return $this->redirectToRoute('app_bibliotheque');
-    }
+    //     return $this->redirectToRoute('app_bibliotheque');
+    // }
 
     public function show($livreId, LivresRepository $livreRepository, EtatsLivresRepository $EtatRepo): Response
     {
@@ -177,5 +193,20 @@ class BibliothequeController extends AbstractController
             'auteurs' => $AuteursRepository->findAll(),
             'etatsLivres' => $etatsLivres->findAll()
         ]);
+    }
+
+    #[Route('/bibliotheque/emprunt/extend/{empruntId}', name: 'app_extend_emprunt', methods: ['POST'])]
+    public function extendEmprunt(EntityManagerInterface $entityManager, int $empruntId): Response
+    {
+        $emprunt = $entityManager->getRepository(Emprunts::class)->find($empruntId);
+        if (!$emprunt || $emprunt->isExtensionEmprunt()) {
+            throw $this->createNotFoundException('Extension non autorisée ou emprunt non trouvé.');
+        }
+
+        $emprunt->setDateRestitutionPrevisionnelle($emprunt->getDateRestitutionPrevisionnelle()->modify('+6 days'));
+        $emprunt->setExtensionEmprunt(true);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_bibliotheque');
     }
 }
