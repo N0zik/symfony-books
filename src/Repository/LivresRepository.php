@@ -37,15 +37,6 @@ class LivresRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findLivresEnRetard()
-    {
-        return $this->createQueryBuilder('l')
-            ->andWhere('l.dateRestitutionPrevisionnelle < :today')
-            ->setParameter('today', new \DateTime())
-            ->getQuery()
-            ->getResult();
-    }
-
 //    /**
 //     * @return Livres[] Returns an array of Livres objects
 //     */

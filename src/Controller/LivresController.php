@@ -3,13 +3,15 @@
 namespace App\Controller;
 
 use App\Entity\Livres;
+use App\Entity\Emprunts;
+use App\Repository\EmpruntsRepository;
 use App\Form\LivresType;
 use App\Repository\LivresRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('/livres')]
 class LivresController extends AbstractController
@@ -80,4 +82,14 @@ class LivresController extends AbstractController
         return $this->redirectToRoute('app_livres_index', [], Response::HTTP_SEE_OTHER);
     }
 
+    #[Route('/livres/en_retard', name: 'livres_en_retard', methods: ['GET'])]
+    public function livresEnRetard(EntityManagerInterface $entityManager): Response
+    {
+        $empruntsRepository = $entityManager->getRepository(Emprunts::class);
+        $empruntsEnRetard = $empruntsRepository->findLivresEnRetard();
+
+        return $this->render('livres/en_retard.html.twig', [
+            'empruntsEnRetard' => $empruntsEnRetard
+        ]);
+    }
 }
