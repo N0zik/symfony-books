@@ -77,7 +77,24 @@
 
         <h2 class="card-title">Votre historique d'emprunts de livres</h2>
 
-        liste à générer
+        {# liste des emprunts de l'utilisateur  #}
+
+            {% if emprunts is not empty %}
+                <ul>
+                    {% for emprunt in emprunts %}
+                        <li>Emprunté par {{ emprunt.utilisateurs.nom }}, livre: {{ emprunt.livres.nom }}</li>
+                        <li>Emprunté le {{ emprunt.dateDemande|date('d/m/Y') }}</li>
+                        {% if emprunt.dateRestitutionEffective is not empty  %}
+                            <li>Retourné le {{ emprunt.dateRestitutionEffective|date('d/m/Y') }}</li>
+                        {% else %}
+                            <p>Non retourné est sera retourné le : {{ emprunt.dateRestitutionPrevisionnelle|date('Y-m-d') }}</p>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>Aucun emprunt trouvé.</p>
+            {% endif %}
+
         
         <br>
         <br>

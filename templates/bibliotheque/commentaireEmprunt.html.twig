@@ -9,7 +9,6 @@
         <h2>Ajouter un commentaire</h2>
         {{ form_start(form) }}
         <div class="form-group">
-            {{ form_label(form.commentaire, 'Votre Commentaire', {'label_attr': {'class': 'form-label'}}) }}
             {{ form_row(form.commentaire, {'attr': {'class': 'form-control'}}) }}
             {{ form_row(form.livres, {'value': id}) }}
             {{ form_errors(form.commentaire) }}

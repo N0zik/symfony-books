@@ -3,8 +3,8 @@ controllers:
     type: attribute
 
 livres_en_retard:
-    path: /bibliotheque/en-retard
-    controller: App\Controller\BibliothequeController::livresEnRetard
+    path: templates/livres/en-retard
+    controller: App\Controller\LivresController::livresEnRetard
 
 app_switch_language:
     path: /switch-language/{_locale}

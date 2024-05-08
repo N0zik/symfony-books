@@ -101,6 +101,7 @@ class BibliothequeController extends AbstractController
         $emprunt->setDateDemande(new DateTime());
         $emprunt->setDateRestitutionPrevisionnelle(new DateTime('+6 days'));
         $emprunt->setExtensionEmprunt(false);
+        $emprunt->setRestitue(false);
 
         // Enregistrer l'emprunt dans la base de données
         $entityManager->persist($emprunt);
@@ -133,32 +134,13 @@ class BibliothequeController extends AbstractController
             if (!$emprunt || $emprunt->getUtilisateurs() != $this->getUser() || $emprunt->getDateRestitutionEffective()) {
                 throw $this->createAccessDeniedException('Action non autorisée.');
             }
-
             $emprunt->setDateRestitutionEffective(new \DateTime());
+            $emprunt->setRestitue(true);
             $emprunt->getLivres()->setDisponibilite(true);
             $entityManager->flush();
 
             return $this->redirectToRoute('app_bibliotheque');
         }
-
-    // #[Route('/bibliotheque/restituer/{empruntId}', name: 'app_restituer', methods: ['POST'])]
-    // public function restituer(int $empruntId, EntityManagerInterface $entityManager)
-    // {
-    //     $empruntRepository = $entityManager->getRepository(Emprunts::class);
-    //     $emprunt = $empruntRepository->find($empruntId);
-    //     if (!$emprunt) {
-    //         throw $this->createNotFoundException('Aucun emprunt trouvé pour cet ID.');
-    //     }
-    
-    //     $livre = $emprunt->getLivres(); // Supposant que votre entité Emprunts a une méthode getLivres()
-    //     $livre->setDisponibilite(true);
-        
-    //     $emprunt->setDateRestitutionEffective(new \DateTime());
-        
-    //     $entityManager->flush();
-    
-    //     return $this->redirectToRoute('app_bibliotheque');
-    // }
 
     public function show($livreId, LivresRepository $livreRepository, EtatsLivresRepository $EtatRepo): Response
     {

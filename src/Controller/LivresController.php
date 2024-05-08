@@ -82,7 +82,7 @@ class LivresController extends AbstractController
         return $this->redirectToRoute('app_livres_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/livres/en_retard', name: 'livres_en_retard', methods: ['GET'])]
+    #[Route('en_retard', name: 'app_en_retard', methods: ['GET'])]
     public function livresEnRetard(EntityManagerInterface $entityManager): Response
     {
         $empruntsRepository = $entityManager->getRepository(Emprunts::class);
