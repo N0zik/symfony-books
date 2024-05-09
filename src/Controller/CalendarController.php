@@ -85,6 +85,7 @@ class CalendarController extends AbstractController
 
         return $this->redirectToRoute('app_calendar_index', [], Response::HTTP_SEE_OTHER);
     }
+    
     #[Route('/api/event', name:'api_event', methods: ['GET'])]
     public function getEvents(CalendarRepository $calendarRepository): Response
     {

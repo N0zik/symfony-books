@@ -9,6 +9,12 @@
 
         <h1>Profil de {{ app.user.prenom ~' '~ app.user.nom }}</h1>
 
+        {% if 'ROLE_BANNI' in app.user.roles %}
+            <div style="background:red; padding:10px; color:white; font-weight:bold">Votre compte est Banni : Vous ne pouvez plus accéder aux services.</div>
+        {% endif %}
+        {% if 'ROLE_ADMIN' in app.user.roles%}
+            <span style="color:red; font-weight:bold">ADMINISTRATEUR</span><br>
+        {% endif %}
         <br>
 
         <h2 class="card-title">Vos informations personnelles</h2>
