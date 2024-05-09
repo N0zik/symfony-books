@@ -1,18 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}TypeAbonnement index{% endblock %}
+{% block title %}Abonnements{% endblock %}
 
 {% block body %}
 <div class="container mt-5">
 
     {% if app.user is defined and app.user.roles is defined %}
         {% if 'ROLE_ADMIN' in app.user.roles %}
-            <h1>Abonnement</h1>
+            <h1>Abonnements</h1>
 
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Id</th>
                         <th>Libellé</th>
                         <th>Tarif</th>
                         <th>Action</th>
@@ -21,11 +20,17 @@
                 <tbody>
                 {% for type_abonnement in type_abonnements %}
                     <tr>
-                        <td>{{ type_abonnement.id }}</td>
                         <td>{{ type_abonnement.libelle }}</td>
                         <td>{{ type_abonnement.tarif }} €</td>
                         <td>
-                            <a href="{{ path('app_type_abonnement_edit', {'id': type_abonnement.id}) }}">Modifier</a>
+                            <a href="{{ path('app_type_abonnement_edit', {'id': type_abonnement.id}) }}" class="btn btn-lg btn-primary">Modifier</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Pour 1 an (365 jours)</td>
+                        <td>{{ (type_abonnement.tarif * 12 *0.9) | number_format(2) }} €</td>
+                        <td>
+                            Non modifiable (Calcul automatique avec 10% de remise)
                         </td>
                     </tr>
                 {% else %}

@@ -104,6 +104,15 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="/abonnements">Abonnements</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/bibliotheque">Bibliothèque</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/salles/travail">Salles travail</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/api/calendrier">Calendrier</a>
+                </li>
                 {% if app.user is defined and app.user.roles is defined %}
                     {% if 'ROLE_ADMIN' in app.user.roles %}
                         <li class="nav-item active">
@@ -114,15 +123,6 @@
                         <a class="nav-link" href="/profile">Profil</a>
                     </li>
                 {% endif %}
-                <li class="nav-item">
-                    <a class="nav-link" href="/bibliotheque">Bibliothèque</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/salles/travail">Salles travail</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/api/calendrier">Calendrier</a>
-                </li>
                 {% if app.user is defined and app.user.roles is defined %}
                     <li class="nav-item">
                         <a class="nav-link" href="/logout">Se déconnecter</a>

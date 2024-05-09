@@ -23,24 +23,23 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body ">
-                            <divb class="d-flex justify-content-center">
+                            <div class="d-flex justify-content-center">
                                 <img src="{{ vich_uploader_asset(livre, 'imageFile') }}" alt="{{ livre.nom }}"
                                      style="height:450px; object-fit: cover">
-                            </divb>
-
-                            <h5 class="mt-5 mb-5">Résumé :</h5>
-                            <p>{{ livre.resume }}</p>
+                            </div>
+                            <br>
+                            <p><b>Résumé :</b> {{ livre.resume }}</p>
                             <p><b>Année de publication :</b> {{ livre.anneePublication }} </p>
-                            <h5>Auteur(s) :
-                                {% if livre.auteurs is empty %}
-                                    <p>Aucun auteur trouvé.</p>
-                                {% else %}
-                                    {% for auteurs in livre.auteurs %}
-                                        <p>{{ auteurs.nom }}</p>
-                                    {% endfor %}
-                                {% endif %}
-                            </h5>
-                            <p>État : {{ livre.etatsLivres.libelle }}</p>
+                            <p><b>Auteur(s) :</b>
+                            {% if livre.auteurs is empty %}
+                                Aucun auteur trouvé.</p>
+                            {% else %}
+                                {% for auteurs in livre.auteurs %}
+                                    {{ auteurs.nom }}</p>
+                                {% endfor %}
+                            {% endif %}
+
+                            <p><b>État :</b> {{ livre.etatsLivres.libelle }}</p>
                             
                             {% if app.user is defined and app.user.roles is defined %}
                                 {# emprunt #}
@@ -83,7 +82,7 @@
                                 {# Affichage des Commentaires #}
                                 
                                     <div style="border: 1px solid; padding: 10px">
-                                        <h5>Commentaires :</h5>
+                                        <h5><b>Commentaires :</b></h5>
                                         {% if livre.commentaires is empty %}
                                             <p>Aucun commentaire trouvé.</p>
                                         {% else %}
@@ -122,17 +121,17 @@
                                 <h5 class="card-title mb-5 d-flex justify-content-center">{{ livre.nom }}</h5>
                                 <p class="card-text d-flex justify-content-center">
                                     {% if livre.auteurs is empty %}
-                                        Aucun auteur trouvé.
+                                        <h6 class="card-subtitle mb-2 text-muted ">Auteur(s) : Aucun auteur trouvé.</h6>
                                     {% else %}
                                         {% for auteur in livre.auteurs %}
-                                            <h6 class="card-subtitle mb-2 text-muted ">Auteur: {{ auteur.nom }}</h6>
+                                            <h6 class="card-subtitle mb-2 text-muted ">Auteur(s) : {{ auteur.nom }}</h6>
                                             {% if not loop.last %}, {% endif %}
                                         {% endfor %}
                                     {% endif %}
                                 </p>
-                                <p class="card-text">Date de publication : {{ livre.anneePublication }}</p>
+                                <p class="card-text">Année de publication : {{ livre.anneePublication }}</p>
 
-                                {% if app.user is defined and app.user.roles is defined %}
+                                {% if app.user is defined and app.user.roles is defined and 'ROLE_BANNI' not in app.user.roles %}
                                     {# emprunt #}
                                     {% if livre.emprunts is not empty %}
                                         {% for emprunt in livre.emprunts %}

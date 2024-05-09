@@ -29,6 +29,7 @@ class TypeAbonnementController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            
             $entityManager->flush();
 
             return $this->redirectToRoute('app_type_abonnement_index', [], Response::HTTP_SEE_OTHER);
