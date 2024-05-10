@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Reservations;
 use App\Entity\SallesTravail;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -147,5 +148,23 @@ class Calendar
         return $this;
     }
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Reservations")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private Reservations $reservations; // Spécifiez le type de la propriété comme étant Reservations
+
+    // Getter et Setter pour la propriété reservations
+    public function getReservations(): ?Reservations
+    {
+        return $this->reservations;
+    }
+
+    public function setReservations(?Reservations $reservations): self
+    {
+        $this->reservations = $reservations;
+
+        return $this;
+    }
 }
 
