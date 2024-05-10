@@ -57,7 +57,7 @@ A savoir :
 
 Un visiteur a accès au site complet, mais ne peut utiliser aucun service. Il doit soit s'inscrire, soit se connecter.
 
-Un utilisateur simple a accès au site complet, il peut utiliser les services (payer un abonnement, emprunter, commenter et noter des livres, réserver des salles de travail, éditer ses informations personnelles ainsi que ses informations de connexion depuis son profil). Consulter son historique d'emprunts de livres et son historique de réservations de salles de travail.
+Un utilisateur simple a accès au site complet, il peut utiliser les services (payer un abonnement, emprunter, demander une extension (une seule fois), commenter et noter des livres, réserver des salles de travail, éditer ses informations personnelles ainsi que ses informations de connexion depuis son profil). Consulter son historique d'emprunts de livres et son historique de réservations de salles de travail.
 => Système de paiement de l'abonnement non réussi. L'utilisateur a donc accès à tout sans être passé par la case paiement.
 
 Un utilisateur banni a accès au site complet, mais ne peut plus utiliser aucun service. Il voit la mention "Votre compte est Banni : Vous ne pouvez plus accéder aux services." dans son profil. Il peut visualiser la bibliothèque mais n'a plus accès aux fonctions.
