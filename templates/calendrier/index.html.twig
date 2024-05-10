@@ -2,8 +2,7 @@
 
 {% block title %}Calendrier{% endblock %}
 
-{% block stylesheets %}
-
+{% block body %}
     <style>
         #calendrier {
             width: 50%;
@@ -11,9 +10,6 @@
         }
     </style>
 
-{% endblock %}
-
-{% block body %}
     <div class="container">
         <div class="row justify-content-center mt-50 ">
             <div class="col-md-25">
@@ -37,7 +33,7 @@
 
 {% block javascripts %}
     <script>
-       function updateEvent(event) {
+        function updateEvent(event) {
             fetch(`/api/${event.id}/edit`, {
                 method: 'PUT',
                 headers: {
@@ -67,8 +63,7 @@
             });
         }
 
-
-            document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function() {
             let calendarElt = document.querySelector('#calendrier');
             let calendar = new FullCalendar.Calendar(calendarElt, {
                 initialView: 'timeGridWeek',
@@ -124,11 +119,9 @@
                         updateEvent(info.event);
                     }
                 }
-
             });
-    calendar.render();
-});
-
+        calendar.render();
+    });
     </script>
 
 {% endblock %}

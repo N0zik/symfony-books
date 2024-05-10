@@ -3,7 +3,9 @@
  ---------------
 
 Partie Rouge : Loic
+
 Partie Verte : Jason
+
 Partie Violette : David
 
 -------------------------------------------------------------------------
