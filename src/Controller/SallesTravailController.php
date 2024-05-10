@@ -14,7 +14,6 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/salles/travail')]
 class SallesTravailController extends AbstractController
 {
-
     #[Route('/', name: 'app_salles_travail_index', methods: ['GET'])]
     public function index(SallesTravailRepository $sallesTravailRepository): Response
     {
@@ -22,7 +21,6 @@ class SallesTravailController extends AbstractController
             'salles_travails' => $sallesTravailRepository->findAll(),
         ]);
     }
-
 
     #[Route('/new', name: 'app_salles_travail_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response

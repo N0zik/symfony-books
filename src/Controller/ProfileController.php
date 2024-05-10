@@ -4,7 +4,13 @@ namespace App\Controller;
 
 use App\Entity\Livres;
 use App\Entity\Emprunt;
+use App\Entity\Reservations;
 use App\Entity\Utilisateurs;
+
+use App\Entity\SallesTravail;
+
+use App\Repository\SallesTravailRepository;
+
 use App\Form\UtilisateursType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,17 +22,21 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 class ProfileController extends AbstractController
 {
     #[Route('/profile', name: 'app_profile')]
-    public function index(): Response
+    public function index(SallesTravailRepository $sallesTravailRepository): Response
     {
         $user = $this->getUser(); 
         if (!$user) {
             throw $this->createNotFoundException('No user is logged in.');
         }
         $emprunts = $user->getEmprunts(); 
+        $reservations = $user->getReservations();
+        $sallesTravail = $sallesTravailRepository->findAll();
   
         return $this->render('profile/index.html.twig', [
             'controller_name' => 'ProfileController',
-            'emprunts' => $emprunts, 
+            'emprunts' => $emprunts,
+            'reservations' => $reservations,
+            'sallesTravail' => $sallesTravail
         ]);
     }
 

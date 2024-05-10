@@ -138,7 +138,36 @@
 
         <h2 class="card-title">Votre historique de réservations de salles de travail</h2>
 
-        liste à générer
+        {# liste des réservations de l'utilisateur  #}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Salle</th>
+                    <th>Date début</th>
+                    <th>Date fin</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% if reservations is not empty %}
+                {% for reservation in reservations %}
+                    <tr>
+                        <td>{% for salleTravail in sallesTravail %} {% if salleTravail.id == reservation.sallesTravail.id %} {{ salleTravail.nom }} {% endif %} {% endfor %}</td>
+                        <td>{{ reservation.dateDebut|date('d/m/Y h:m') }}</td>
+                        <td>{{ reservation.dateFin|date('d/m/Y h:m') }}</td>
+                        <td>
+                            <a href="{{ path('app_calendar_show', {'id': reservation.id}) }}" class="btn btn-outline-success">Afficher</a>
+                            <a href="{{ path('app_calendar_edit', {'id': reservation.id}) }}" class="btn btn-primary">Modifier</a>
+                            <a href="{{ path('app_calendar_delete', {'id': reservation.id}) }}" class="btn btn-danger">Supprimer</a>
+                        </td>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="13">Aucun emprunt trouvé.</td>
+                </tr>
+            {% endif %}
+            </tbody>
+        </table>
 
     </div>
 {% endblock %}
