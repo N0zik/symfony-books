@@ -1,42 +1,39 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Calendar index{% endblock %}
+{% block title %}Calendar{% endblock %}
 
 {% block body %}
     <div class="container mt-5">
         <h1 class="text-center mb-5">Vos réservations</h1>
         <div class="row">
             {% for calendar in calendars %}
-            <div class="col-md-4">
-                <div class="card mb-4">
-                    {% for salleTravail in sallesTravail %}
-                        {% for reservation in reservations %}
-                            {% if salleTravail.id == reservation.id %}
-                                {% if calendar.id == reservation.id %}
-                                    <div class="card-body">
-                                        <div class="col-md-12">
-                                            <img src="../images/salles_images/salle-de-travail-{{ reservation.sallesTravail.id }}.jpg" class="img-fluid mb-3" alt="Image de la salle">
+                {% for salleTravail in sallesTravail %}
+                    {% for reservation in reservations %}
+                        {% if salleTravail.id == reservation.id %}
+                            {% if calendar.id == reservation.id and reservation.utilisateurs.id == app.user.id %}
+                                <div class="col-md-4">
+                                    <div class="card mb-4">
+                                        <div class="card-body">
+                                            <div class="col-md-12">
+                                                <img src="../images/salles_images/salle-de-travail-{{ reservation.sallesTravail.id }}.jpg" class="img-fluid mb-3" alt="Image de la salle">
+                                            </div>
+                                            <h5 class="card-title">Titre : {{ calendar.title }}</h5>
+                                            <p class="card-text">Date début : {{ calendar.start|date('d/m/Y h:m') }}</p>
+                                            <p class="card-text">Date fin : {{ calendar.end|date('d/m/Y h:m') }}</p>
+                                            <p class="card-text">Description : {{ calendar.description }}</p>
+                                            <p class="card-text">Chaque jour : {{ calendar.allDay ? 'Oui' : 'Non' }}</p>
+                                            <div class="d-grid gap-2">
+                                                <a href="{{ path('app_calendar_show', {'id': calendar.id}) }}" class="btn btn-outline-success btn-lg">Afficher</a>
+                                                <a href="{{ path('app_calendar_edit', {'id': calendar.id}) }}" class="btn btn-outline-success btn-lg">Modifier</a>
+                                                <a href="{{ path('app_calendar_delete', {'id': calendar.id}) }}" class="btn btn-outline-success btn-lg">Supprimer</a>
+                                            </div>
                                         </div>
                                     </div>
-                                {% endif %}
+                                </div>
                             {% endif %}
-                        {% endfor %}  
-                    {% endfor %}    
-
-                    <div class="card-body">
-                        <h5 class="card-title">{{ calendar.title }}</h5>
-                        <p class="card-text">Heure d'arrivée: {{ calendar.start ? calendar.start|date(' H:i :  Y-m-d') : 'N/A' }}</p>
-                        <p class="card-text">Heure de départ: {{ calendar.end ? calendar.end|date(' H:i : Y-m-d') : 'N/A' }}</p>
-                        <p class="card-text">Description: {{ calendar.description }}</p>
-                        <p class="card-text">Chaque jour: {{ calendar.allDay ? 'Oui' : 'Non' }}</p>
-                        <div class="d-grid gap-2">
-                            <a href="{{ path('app_calendar_show', {'id': calendar.id}) }}" class="btn btn-outline-success btn-lg">Afficher</a>
-                            <a href="{{ path('app_calendar_edit', {'id': calendar.id}) }}" class="btn btn-outline-success btn-lg">Modifier</a>
-                            <a href="{{ path('app_calendar_delete', {'id': calendar.id}) }}" class="btn btn-outline-success btn-lg">Supprimer</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                        {% endif %}
+                    {% endfor %}  
+                {% endfor %}    
             {% else %}
             <div class="col">
                 <p>Aucun enregistrement trouvé</p>

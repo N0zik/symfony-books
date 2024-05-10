@@ -13,30 +13,30 @@
                 <td>{{ calendar.id }}</td>
             </tr>
             <tr>
-                <th>Title</th>
+                <th>Titre</th>
                 <td>{{ calendar.title }}</td>
             </tr>
             <tr>
-                <th>Start</th>
-                <td>{{ calendar.start ? calendar.start|date('Y-m-d H:i:s') : '' }}</td>
+                <th>Date début</th>
+                <td>{{ calendar.start|date('d/m/Y h:m') }}</td>
             </tr>
             <tr>
-                <th>End</th>
-                <td>{{ calendar.end ? calendar.end|date('Y-m-d H:i:s') : '' }}</td>
+                <th>Date fin</th>
+                <td>{{ calendar.end|date('d/m/Y h:m') }}</td>
             <tr>
                 <th>Description</th>
                 <td>{{ calendar.description }}</td>
             </tr>
             <tr>
-                <th>All_day</th>
+                <th>Chaque jour</th>
                 <td>{{ calendar.allDay ? 'Yes' : 'No' }}</td>
             </tr>
             <tr>
-                <th>Background_color</th>
+                <th>Background color</th>
                 <td>{{ calendar.backgroundColor }}</td>
             </tr>
             <tr>
-                <th>Text_color</th>
+                <th>Text color</th>
                 <td>{{ calendar.textColor }}</td>
             </tr>
         </tbody>

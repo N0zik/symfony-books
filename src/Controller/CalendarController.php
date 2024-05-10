@@ -3,13 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Calendar;
-
 use App\Entity\Reservations;
-
 use App\Entity\SallesTravail;
-
+use App\Form\CalendarType;
 use App\Form\FusionnerFormType;
-
 use App\Repository\CalendarRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ReservationsRepository;
@@ -36,7 +33,6 @@ class CalendarController extends AbstractController
             'reservations' => $reservations
         ]);
     }
-
 
     #[Route('/new/{id}', name: 'app_calendar_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, int $id, SallesTravail $sallesTravail): Response
