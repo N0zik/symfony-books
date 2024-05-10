@@ -1,11 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Calendar{% endblock %}
+{% block title %}Réservez votre créneau dans la {{ nom }}{% endblock %}
 
 {% block body %}
     <div class="container mt-15">
-        <h1>Prenez votre rendez-vous</h1>
+        <h1>Réservez votre créneau dans la {{ nom }}</h1>
         {{ include('calendar/_form.html.twig') }}
+        {{ form_start(form) }}
         <a href="{{ path('app_calendar_index') }}" class="btn btn-success btn-lg btn-block">Voir vos reservation</a>
     </div>
 {% endblock %}

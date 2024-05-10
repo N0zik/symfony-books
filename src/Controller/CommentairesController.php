@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Commentaires;
-use App\Form\Commentaires1Type;
 use App\Repository\CommentairesRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
