@@ -3,7 +3,10 @@
 namespace App\Controller;
 
 use DateTime;
+use App\Entity\Notes;
+use App\Entity\Livres;
 use App\DTO\SearchData;
+use App\Form\NotesType;
 use App\Entity\Emprunts;
 use App\Form\SearchType;
 use App\Entity\Commentaires;
@@ -190,5 +193,32 @@ class BibliothequeController extends AbstractController
         $entityManager->flush();
 
         return $this->redirectToRoute('app_bibliotheque');
+    }
+
+    #[Route('/bibliotheque/note/{livreId}', name: 'app_note', methods: ['GET', 'POST'])]
+    public function note(Request $request, EntityManagerInterface $entityManager, int $livreId): Response
+    {
+        $note = new Notes();
+        $form = $this->createForm(NotesType::class, $note);
+        $form->handleRequest($request);
+        $user = $this->getUser();
+
+        if (!$user) {
+            throw new AccessDeniedException('Vous devez être connecté pour noter un livre.');
+        }
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $note = $form->getData();
+            $note->setUtilisateurs($this->getUser());
+            $entityManager->persist($note);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_bibliotheque');
+        }
+
+        return $this->render('bibliotheque/notes.html.twig', [
+            'form' => $form->createView(),
+            'id' => $livreId
+        ]);
     }
 }

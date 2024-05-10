@@ -95,7 +95,37 @@
                                         
                                         {# ajouter un commentaire #}
                                         <form action="{{ path('app_commentaire_emprunt', {'livreId': livre.id}) }}" method="post">
-                                            <button type="submit" class="btn btn-primary mt-3">Ajout Commentaire</button>
+                                            <button type="submit" class="btn btn-primary mt-3">Ajouter un commentaire</button>
+                                        </form>
+                                    </div>
+
+                                    <br>
+                                {# Affichage des Notes #}
+                                
+                                    <div style="border: 1px solid; padding: 10px">
+                                        <h5><b>Notes :</b></h5>
+                                        {% if livre.notes is empty %}
+                                            <p>Aucune note trouvée.</p>
+                                        {% else %}
+                                            {% for note in livre.notes %}
+                                                <h5>Par : {{ note.utilisateurs.prenom ~' '~ note.utilisateurs.nom }}</h5>
+                                                {% if note.note == 1 %}
+                                                    <p>⭐</p>
+                                                {% elseif note.note == 2 %}
+                                                    <p>⭐⭐</p>
+                                                {% elseif note.note == 3 %}
+                                                    <p>⭐⭐⭐</p>
+                                                {% elseif note.note == 4 %}
+                                                    <p>⭐⭐⭐⭐</p>
+                                                {% else %}
+                                                    <p>⭐⭐⭐⭐⭐</p>
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endif %}
+                                        
+                                        {# ajouter une note #}
+                                        <form action="{{ path('app_note', {'livreId': livre.id}) }}" method="post">
+                                            <button type="submit" class="btn btn-primary mt-3">Ajouter une note</button>
                                         </form>
                                     </div>
 
@@ -170,7 +200,7 @@
                                     <br>
                                     
                                     <button type="button" class="btn btn-primary " data-bs-toggle="modal"
-                                        data-bs-target="#staticBackdrop{{ livre.id }}">voir plus
+                                        data-bs-target="#staticBackdrop{{ livre.id }}">Voir plus
                                     </button>
                                 {% endif %} 
                             </div>
