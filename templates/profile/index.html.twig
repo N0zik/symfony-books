@@ -92,7 +92,7 @@
                     <th>Restitution prévisionnelle</th>
                     <th>Restitution effective</th>
                     <th>Extension</th>
-                    <th>Action</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -115,7 +115,12 @@
                         {% if emprunt.restitue %}
                             <td style="color:green">Déjà restitué</td>
                         {% else %}
-                            <td><form method="post" action="{{ path('app_restituer', {'empruntId': emprunt.id}) }}"><button type="submit" class="btn btn-danger">Restituer</button></form></td>
+                            <td>
+                                <form method="post" action="{{ path('app_restituer', {'empruntId': emprunt.id}) }}" style="display:inline-block;"><button type="submit" class="btn btn-danger">Restituer</button></form>
+                                {% if not emprunt.extensionEmprunt %}
+                                    <form method="post" action="{{ path('app_extend_emprunt', {'empruntId': emprunt.id}) }}" style="display:inline-block;"><button type="submit" class="btn btn-warning">Extension</button></form>
+                                {% endif %}
+                            </td>
                         {% endif %}
                 {% endfor %}
             {% else %}
