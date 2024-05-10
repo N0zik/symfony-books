@@ -188,7 +188,11 @@ class BibliothequeController extends AbstractController
             throw $this->createNotFoundException('Extension non autorisée ou emprunt non trouvé.');
         }
 
-        $emprunt->setDateRestitutionPrevisionnelle($emprunt->getDateRestitutionPrevisionnelle()->modify('+6 days'));
+        $dateOriginal = $emprunt->getDateRestitutionPrevisionnelle();
+        $dateModifiee = clone $dateOriginal;  // Cloner l'objet pour éviter la modification de l'original
+        $dateModifiee->modify('+6 days');    // Modifier la copie
+        $emprunt->setDateRestitutionPrevisionnelle($dateModifiee);  // Mettre à jour avec la nouvelle date
+
         $emprunt->setExtensionEmprunt(true);
         $entityManager->flush();
 

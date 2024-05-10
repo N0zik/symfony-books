@@ -49,9 +49,14 @@
                                                 <div style="border: 1px solid; padding: 10px">
                                                     <p>Emprunté le : {{ emprunt.dateDemande|date('d-m-Y') }}</p>
                                                     <p>Restitution prévue le: {{ emprunt.dateRestitutionPrevisionnelle|date('d-m-Y') }}</p>
-                                                    <form method="post" action="{{ path('app_restituer', {'empruntId': emprunt.id}) }}">
+                                                    <form method="post" action="{{ path('app_restituer', {'empruntId': emprunt.id}) }}" style="display:inline-block;">
                                                         <button type="submit" class="btn btn-danger">Restituer</button>
                                                     </form>
+                                                    {% if not emprunt.extensionEmprunt %}
+                                                        <form method="post" action="{{ path('app_extend_emprunt', {'empruntId': emprunt.id}) }}" style="display:inline-block;">
+                                                            <button type="submit" class="btn btn-warning">Extension</button>
+                                                        </form>
+                                                    {% endif %}
                                                 </div>
                                                 <br>
                                             {% else %} 
@@ -169,9 +174,14 @@
                                             <div style="border: 1px solid; padding: 10px">
                                                 <p>Emprunté le : {{ emprunt.dateDemande|date('Y-m-d') }}</p>
                                                 <p>Restitution prévue le : {{ emprunt.dateRestitutionPrevisionnelle|date('d-m-Y') }}</p>
-                                                    <form method="post" action="{{ path('app_restituer', {'empruntId': emprunt.id}) }}">
+                                                    <form method="post" action="{{ path('app_restituer', {'empruntId': emprunt.id}) }}" style="display:inline-block;">
                                                         <button type="submit" class="btn btn-danger">Restituer</button>
                                                     </form>
+                                                    {% if not emprunt.extensionEmprunt %}
+                                                        <form method="post" action="{{ path('app_extend_emprunt', {'empruntId': emprunt.id}) }}" style="display:inline-block;">
+                                                            <button type="submit" class="btn btn-warning">Extension</button>
+                                                        </form>
+                                                    {% endif %}
                                             </div>
                                             <br>
                                             {% else %} 
