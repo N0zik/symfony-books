@@ -1,4 +1,70 @@
 {{ form_start(form) }}
     {{ form_widget(form) }}
-<button class="btn btn-outline-success btn-lg btn-block">{{ button_label|default('Save') }}</button>
+
+<button class="btn btn-primary btn-lg btn-block">Sauvegarder</button>
 {{ form_end(form) }}
+
+{% block javascripts %}
+    <script>
+        const startDateInput1 = document.getElementById('fusionner_form_calendar_start_date');
+        const startHeuresInput1 = document.getElementById('fusionner_form_calendar_start_time_hour');
+        const startMinutesInput1 = document.getElementById('fusionner_form_calendar_start_time_minute');
+
+        const endDateInput1 = document.getElementById('fusionner_form_calendar_end_date');
+        const endHeuresInput1 = document.getElementById('fusionner_form_calendar_end_time_hour');
+        const endMinutesInput1 = document.getElementById('fusionner_form_calendar_end_time_minute');
+
+
+        const startDateInput2 = document.getElementById('fusionner_form_reservations_dateDebut_date');
+        const startHeuresInput2 = document.getElementById('fusionner_form_reservations_dateDebut_time_hour');
+        const startMinutesInput2 = document.getElementById('fusionner_form_reservations_dateDebut_time_minute');
+
+        const endDateInput2 = document.getElementById('fusionner_form_reservations_dateFin_date');
+        const endHeuresInput2 = document.getElementById('fusionner_form_reservations_dateFin_time_hour');
+        const endMinutesInput2 = document.getElementById('fusionner_form_reservations_dateFin_time_minute');
+
+
+        startDateInput1.addEventListener('change', () => {
+            const startDate = new Date(startDateInput1.value);
+            const endDate = new Date(startDate.getTime());
+            endDate.setDate(startDate.getDate());
+            
+            endDateInput1.valueAsDate = endDate;
+            startDateInput2.valueAsDate = endDate;
+            endDateInput2.valueAsDate = endDate;
+        });
+
+        startHeuresInput1.addEventListener('change', () => {
+            startHeuresInput2.value = startHeuresInput1.value;
+        });
+
+        startMinutesInput1.addEventListener('change', () => {
+            startMinutesInput2.value = startMinutesInput1.value;
+        });
+
+        endHeuresInput1.addEventListener('change', () => {
+            endHeuresInput2.value = endHeuresInput1.value;
+        });
+
+        endMinutesInput1.addEventListener('change', () => {
+            endMinutesInput2.value = endMinutesInput1.value;
+        });
+
+
+        document.getElementById('fusionner_form_reservations_utilisateurs').value = {{ app.user.id }};
+
+        document.getElementById('fusionner_form_reservations_sallesTravail').value = {{ id }};
+    </script>
+{% endblock %}
+
+{% block steelsheets %}
+    <style>
+        #fusionner_form_calendar_end_date {
+            display: none;
+        }
+
+        #fusionner_form_reservations {
+            display: none;
+        }
+    </style>
+{% endblock %}

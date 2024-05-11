@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : ven. 10 mai 2024 à 14:11
+-- Généré le : sam. 11 mai 2024 à 02:03
 -- Version du serveur : 8.2.0
 -- Version de PHP : 8.2.13
 
@@ -125,17 +125,19 @@ CREATE TABLE IF NOT EXISTS `calendar` (
   `text_color` varchar(7) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `end` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Déchargement des données de la table `calendar`
 --
 
 INSERT INTO `calendar` (`id`, `title`, `start`, `description`, `all_day`, `background_color`, `text_color`, `end`) VALUES
-(1, '1er test', '2024-05-09 00:00:00', 'Description', 0, '#000000', '#000000', '2024-05-10 00:00:00'),
-(2, '2ème test', '2024-05-11 00:00:00', '2eme', 0, '#000000', '#000000', '2024-05-13 00:00:00'),
-(3, '3ème test', '2024-05-11 00:00:00', 'ok', 0, '#000000', '#000000', '2024-05-14 00:00:00'),
-(4, '4ème test', '2024-05-11 00:00:00', 'test', 0, '#000000', '#000000', '2024-05-12 00:00:00');
+(1, '1er test', '2024-05-11 00:00:00', '2eme', 0, '#000000', '#000000', '2024-05-13 00:00:00'),
+(2, '2ème test', '2024-05-11 00:00:00', 'ok', 0, '#000000', '#000000', '2024-05-14 00:00:00'),
+(3, '3ème test', '2024-05-11 00:00:00', 'test', 0, '#000000', '#000000', '2024-05-12 00:00:00'),
+(4, '4ème test', '2024-05-26 14:30:00', 'ceci est le l\'avant dernier test', 0, '#000000', '#000000', '2024-05-26 18:15:00'),
+(5, '5ème test', '2024-05-24 09:15:00', 'c\'est good !', 0, '#000000', '#000000', '2024-05-24 12:30:00'),
+(6, '6ème test', '2024-05-12 08:15:00', 'ok', 0, '#000000', '#000000', '2024-05-12 13:15:00');
 
 -- --------------------------------------------------------
 
@@ -417,17 +419,19 @@ CREATE TABLE IF NOT EXISTS `reservations` (
   PRIMARY KEY (`id`),
   KEY `IDX_4DA2391E969C5` (`utilisateurs_id`),
   KEY `IDX_4DA2396E318F2B` (`salles_travail_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Déchargement des données de la table `reservations`
 --
 
 INSERT INTO `reservations` (`id`, `utilisateurs_id`, `salles_travail_id`, `date_debut`, `date_fin`) VALUES
-(1, 2, 2, '2024-05-10 00:00:00', '2024-05-11 00:00:00'),
-(2, 1, 4, '2024-05-11 00:00:00', '2024-05-18 00:00:00'),
-(3, 1, 1, '2024-05-11 00:00:00', '2024-05-17 00:00:00'),
-(4, 1, 3, '2024-05-12 00:00:00', '2024-05-12 12:00:00');
+(1, 1, 4, '2024-05-11 00:00:00', '2024-05-18 00:00:00'),
+(2, 2, 1, '2024-05-11 00:00:00', '2024-05-17 00:00:00'),
+(3, 1, 3, '2024-05-12 00:00:00', '2024-05-12 12:00:00'),
+(4, 2, 4, '2024-05-26 14:30:00', '2024-05-26 18:15:00'),
+(5, 2, 5, '2024-05-24 09:15:00', '2024-05-24 12:30:00'),
+(6, 1, 2, '2024-05-12 08:15:00', '2024-05-12 13:15:00');
 
 -- --------------------------------------------------------
 

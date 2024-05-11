@@ -3,50 +3,47 @@
 {% block title %}Calendar{% endblock %}
 
 {% block body %}
-    <h1>Calendar</h1>
+    <div class="container mt-5">
+        <h1>Calendar</h1>
 
-<div style="width: 50%; margin: auto;">
-    <table class="table">
-        <tbody>
-            <tr>
-                <th >Id</th>
-                <td>{{ calendar.id }}</td>
-            </tr>
-            <tr>
-                <th>Titre</th>
-                <td>{{ calendar.title }}</td>
-            </tr>
-            <tr>
-                <th>Date début</th>
-                <td>{{ calendar.start|date('d/m/Y h:m') }}</td>
-            </tr>
-            <tr>
-                <th>Date fin</th>
-                <td>{{ calendar.end|date('d/m/Y h:m') }}</td>
-            <tr>
-                <th>Description</th>
-                <td>{{ calendar.description }}</td>
-            </tr>
-            <tr>
-                <th>Chaque jour</th>
-                <td>{{ calendar.allDay ? 'Yes' : 'No' }}</td>
-            </tr>
-            <tr>
-                <th>Background color</th>
-                <td>{{ calendar.backgroundColor }}</td>
-            </tr>
-            <tr>
-                <th>Text color</th>
-                <td>{{ calendar.textColor }}</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th >Id</th>
+                    <td>{{ calendar.id }}</td>
+                </tr>
+                <tr>
+                    <th>Titre</th>
+                    <td>{{ calendar.title }}</td>
+                </tr>
+                <tr>
+                    <th>Date début</th>
+                    <td>{{ calendar.start|date('d/m/Y h:m') }}</td>
+                </tr>
+                <tr>
+                    <th>Date fin</th>
+                    <td>{{ calendar.end|date('d/m/Y h:m') }}</td>
+                <tr>
+                    <th>Description</th>
+                    <td>{{ calendar.description }}</td>
+                </tr>
+                <tr>
+                    <th>Chaque jour</th>
+                    <td>{{ calendar.allDay ? 'Yes' : 'No' }}</td>
+                </tr>
+                <tr>
+                    <th>Background color</th>
+                    <td>{{ calendar.backgroundColor }}</td>
+                </tr>
+                <tr>
+                    <th>Text color</th>
+                    <td>{{ calendar.textColor }}</td>
+                </tr>
+            </tbody>
+        </table>
 
-
-    <a href="{{ path('app_calendar_index') }}" class="btn btn-outline-success btn-lg btn-block">Voir vos Réservations</a>
-
-    <a href="{{ path('app_calendar_edit', {'id': calendar.id}) }}" class="btn btn-outline-success btn-lg btn-block">edit</a>
-
-    {{ include('calendar/_delete_form.html.twig') }}
+        <a href="{{ path('app_calendar_index') }}" class="btn btn-success btn-lg btn-block">Retourner à vos réservations</a>
+        <br><br>
+        {{ include('calendar/_delete_form.html.twig') }}
+    </div>
 {% endblock %}

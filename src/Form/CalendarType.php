@@ -8,6 +8,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ColorType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -18,12 +19,20 @@ class CalendarType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('title')
+            ->add('title', TextType::class, [
+                'label' => 'Titre'
+            ])
             ->add('start', DateTimeType::class, [
                 'date_widget' => 'single_text',
+                'hours' => range(8, 19),
+                'minutes' => range(0, 59, 15),
+                'label' => 'Date début'
             ])
             ->add('end', DateTimeType::class, [
                 'date_widget' => 'single_text',
+                'hours' => range(8, 19),
+                'minutes' => range(0, 59, 15),
+                'label' => 'Date fin'
             ])
             ->add('description')
             ->add('all_day')
