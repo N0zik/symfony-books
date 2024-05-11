@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Utilisateurs;
+use App\Repository\UtilisateursRepository;
 use App\Entity\Calendar;
 use App\Entity\Reservations;
 use App\Entity\SallesTravail;
@@ -19,7 +21,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 #[Route('/calendar')]
 class CalendarController extends AbstractController
 {
-
     #[Route('/', name: 'app_calendar_index', methods: ['GET'])]
     public function index(CalendarRepository $calendarRepository, SallesTravailRepository $sallesTravailRepository, ReservationsRepository $reservationsRepository): Response
     {
@@ -31,6 +32,22 @@ class CalendarController extends AbstractController
             'calendars' => $calendars,
             'sallesTravail' => $sallesTravail,
             'reservations' => $reservations
+        ]);
+    }
+
+    #[Route('/reservations', name: 'app_calendar_admin_index', methods: ['GET'])]
+    public function reservervations(CalendarRepository $calendarRepository, SallesTravailRepository $sallesTravailRepository, ReservationsRepository $reservationsRepository, UtilisateursRepository $utilisateursRepository): Response
+    {
+        $calendars = $calendarRepository->findAll();
+        $sallesTravail = $sallesTravailRepository->findAll();
+        $reservations = $reservationsRepository->findAll();
+        $utilisateurs = $utilisateursRepository->findAll();
+
+        return $this->render('calendar/reservations.html.twig', [
+            'calendars' => $calendars,
+            'sallesTravail' => $sallesTravail,
+            'reservations' => $reservations,
+            'utilisateurs' => $utilisateurs
         ]);
     }
 
@@ -51,7 +68,6 @@ class CalendarController extends AbstractController
                 $formulaire1Data = $form->get('calendar')->getData();
                 
                 $formulaire2Data = $form->get('reservations')->getData();
-                
 
                 $entityManager->persist($formulaire1Data);
                 $entityManager->persist($formulaire2Data);
@@ -76,29 +92,12 @@ class CalendarController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_calendar_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Calendar $calendar, EntityManagerInterface $entityManager): Response
-    {
-        $form = $this->createForm(CalendarType::class, $calendar);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_calendar_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('calendar/edit.html.twig', [
-            'calendar' => $calendar,
-            'form' => $form,
-        ]);
-    }
-
     #[Route('/{id}', name: 'app_calendar_delete', methods: ['POST'])]
-    public function delete(Request $request, Calendar $calendar, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, Calendar $calendar, Reservations $reservations, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$calendar->getId(), $request->getPayload()->get('_token'))) {
             $entityManager->remove($calendar);
+            $entityManager->remove($reservations);
             $entityManager->flush();
         }
 

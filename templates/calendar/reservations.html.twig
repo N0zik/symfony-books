@@ -5,14 +5,14 @@
 {% block body %}
     <div class="container mt-5">
         {% if app.user is defined and app.user.roles is defined %}
-            {% if 'ROLE_BANNI' not in app.user.roles %}
-                <h1 class="text-center mb-5">Vos réservations</h1>
+            {% if 'ROLE_ADMIN' in app.user.roles %}
+                <h1 class="text-center mb-5">Toutes les réservations</h1>
                 <div class="row">
                     {% for calendar in calendars %}
                         {% for salleTravail in sallesTravail %}
                             {% for reservation in reservations %}
                                 {% if salleTravail.id == reservation.sallesTravail.id %}
-                                    {% if calendar.id == reservation.id and reservation.utilisateurs.id == app.user.id %}
+                                    {% if calendar.id == reservation.id %}
                                         <div class="col-md-4">
                                             <div class="card mb-4">
                                                 <div class="card-body">
@@ -20,6 +20,8 @@
                                                         <img src="../images/salles_images/salle-de-travail-{{ reservation.sallesTravail.id }}.jpg" class="img-fluid mb-3" alt="Image de la salle">
                                                         <h4>{% for salleTravail in sallesTravail %} {% if salleTravail.id == reservation.sallesTravail.id %} {{ salleTravail.nom }} {% endif %} {% endfor %}</h4>
                                                     </div>
+                                                    <br>
+                                                    <h5 class="card-title">Réservé par : {% for utilisateur in utilisateurs %} {% if utilisateur.id == reservation.utilisateurs.id %} {{ utilisateur.prenom ~' '~ utilisateur.nom }} {% endif %} {% endfor %}</h5>
                                                     <br>
                                                     <h5 class="card-title">Titre : {{ calendar.title }}</h5>
                                                     <p class="card-text">Date début : {{ calendar.start|date('d/m/Y h:m') }}</p>
@@ -43,16 +45,16 @@
                         </div>
                     {% endfor %}
                 </div>
-            </div>
-
-            <div class="text-center">
-                <a href="{{ path('app_salles_travail_index') }}" class="btn btn-success btn-lg">Nouvelle réservation</a>
-            </div>
+            {% else %}
+                <h1>Vous n'êtes pas Administrateur, accès interdit !</h1>
+            {% endif %}
         {% else %}
-            <h1>Vous êtes Banni, accès interdit !</h1>
+            <h1>Accès interdit !</h1>
         {% endif %}
-    {% else %}
-        <h1>Accès interdit !</h1>
-    {% endif %}
+    </div>
+
+    <div class="text-center">
+        <a href="{{ path('app_salles_travail_index') }}" class="btn btn-success btn-lg">Nouvelle réservation</a>
+    </div>
 </div>
 {% endblock %}

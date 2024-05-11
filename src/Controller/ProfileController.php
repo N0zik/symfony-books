@@ -6,11 +6,8 @@ use App\Entity\Livres;
 use App\Entity\Emprunt;
 use App\Entity\Reservations;
 use App\Entity\Utilisateurs;
-
 use App\Entity\SallesTravail;
-
 use App\Repository\SallesTravailRepository;
-
 use App\Form\UtilisateursType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
